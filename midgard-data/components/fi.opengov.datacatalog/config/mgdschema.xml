@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Schema xmlns="http://www.midgard-project.org/repligard/1.4">
+    <type name="fi_opengov_datacatalog_dataset" table="fi_opengov_datacatalog_dataset">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="description" type="text">
+            <description>Textual description of the dataset</description>
+        </property>
+        <property name="url" type="string">
+            <description>Web address of the dataset</description>
+        </property>
+    </type>
+</Schema>
