@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC"-// W3C//DTD HTML 4.01//EN"" http://www.w3.org/TR/html4/strict.dtd">
-<html lang="sv">
+<html lang="fi">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <title>Tervetuloa - opengov
@@ -12,8 +12,6 @@
         <link href="/style/css/print2.css" rel="stylesheet" type="text/css" media="print">
         <!--[if IE 7]><link href="/syle/css/ie7.css" rel="stylesheet" type="text/css"><![endif]-->
         <!--[if lte IE 7]><link href="/style/css/ie6-7.css" rel="stylesheet" type="text/css"><![endif]-->
-        <link rel="alternate" type="application/atom+xml" title="Kommentarer" href="http://opengov.fi/feeds/comments/">
-        <link rel="alternate" type="application/atom+xml" title="Latest \datasets" href="http://opengov.fi/feeds/data/">
         <link rel="schema.DC" href="http://purl.org/DC/elements/1.0/">
     </head>
     <body>
