@@ -2,8 +2,7 @@
 <html lang="fi">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <title>Tervetuloa - opengov
-        </title>
+        <title>Tervetuloa - opengov</title>
         <?php
         $_MIDCOM->print_head_elements();
         ?> 

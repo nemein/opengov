@@ -13,15 +13,15 @@ $navi->draw();
 <div class="topmenu robots-nocontent" role="navigation" id="nav">
                         <ul>
                             <li class="blog">
-                                <a href="/fi/" class="selected">Blog
+                                <a href="/" class="selected">Blog
                                 </a>
                             </li>
                             <li class="data">
-                                <a href="/fi/data/">Data
+                                <a href="/data/">Data
                                 </a>
                             </li>
                             <li class="community">
-                                <a href="http://opengov.fi/page/">Mallisivu
+                                <a href="/page/">Mallisivu
                                 </a>
                             </li>
                         </ul>
@@ -44,6 +44,5 @@ $navi->draw();
                     <p class="breadcrumb robots-nocontent">
                         <span>Olet tässä:
                         </span>
-                        <a href="http://opengov.fi/">Etusivu
-                        </a> 
+                        <a href="/">Etusivu</a> 
                     </p>
