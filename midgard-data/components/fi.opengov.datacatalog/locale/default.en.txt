@@ -1,0 +1,52 @@
+---# MidCOM String Database
+---VERSION 2.1.0
+---LANGUAGE en
+
+---STRING yes
+Yes
+---STRINGEND
+
+---STRING no
+No
+---STRINGEND
+
+---STRING dataset_list
+Datasets
+---STRINGEND
+
+---STRING dataset_latest_additions
+Latest Additions
+---STRINGEND
+
+---STRING dataset_description
+Description
+---STRINGEND
+
+---STRING dataset_organization
+Organization
+---STRINGEND
+
+---STRING dataset_formats
+Format(s)
+---STRINGEND
+
+---STRING dataset_open
+Open
+---STRINGEND
+
+---STRING dataset_list_info
+Below is the list of datasets we have in our system.
+---STRINGEND
+
+---STRING view_datasets
+View Datasets
+---STRINGEND
+
+---STRING create_dataset
+Create Dataset
+---STRINGEND
+
+---STRING news
+News
+---STRINGEND
+

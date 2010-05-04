@@ -18,14 +18,19 @@
             'role' => 'lead',
             'active' => 'yes',
         ),
+        'ferenc' => array
+        (
+            'name' => 'Ferenc Szekely',
+            'email' => 'ferenc.szekely@gmail.com',
+            'role' => 'lead',
+            'active' => 'yes',
+        ),
     ),
     'dependencies' => array
     (
         'midcom.helper.datamanager2' => array(),
+        'net.nemein.tag' => array(),
         'midcom' => array(),
     ),
 ),
-'customdata' => array
-(
-    'skip_cache_generation' => true,
-),
+

@@ -1,0 +1,48 @@
+div.dataset_list_info {
+    padding: 0 0 1em 0;
+    margin: 0 0 1em 0;
+    border-bottom: 1px solid #999999;
+}
+
+div.dataset_list div.header {
+    border-bottom: 1px solid red;
+}
+
+div.dataset_list div.header div {
+    font-weight: bold;
+    background: #EFEFEF;
+    height: 1.5em;
+}
+
+div.dataset_item a.title {
+    display: block;
+    clear: both;
+}
+
+div.dataset_list div.header div,
+div.dataset_item div {
+    display: inline-block;
+    vertical-align: top;
+    padding: 4px 5px;
+}
+
+div.dataset_list div.header .description,
+div.dataset_item .description {
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+div.dataset_item .org {
+    width: 10em;
+    margin: 0 1em 0 0;
+}
+
+div.dataset_item .formats {
+    width: 6em;
+    margin: 0 1em 0 0;
+}
+
+div.dataset_item .open {
+    width: 4em;
+}
+

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Schema xmlns="http://www.midgard-project.org/repligard/1.4">
-    <type name="fi_opengov_datacatalog_dataset" table="fi_opengov_datacatalog_dataset">
+
+    <type name="fi_opengov_datacatalog_dataset" table="fi_opengov_datacatalog_dataset" parent="fi_opengov_datacatalog_info">
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="title" type="string">
+            <description>Textual description of the dataset</description>
         </property>
         <property name="description" type="text">
             <description>Textual description of the dataset</description>
@@ -10,5 +14,39 @@
         <property name="url" type="string">
             <description>Web address of the dataset</description>
         </property>
+        <property name="organization" type="unsigned integer" parentfield="organization" link="fi_opengov_datacatalog_info:id">
+            <description>The organization publishing the dataset</description>
+        </property>
+        <property name="license" type="unsigned integer" link="fi_opengov_datacatalog_info:id">
+            <description>License of the dataset</description>
+        </property>
     </type>
+
+    <type name="fi_opengov_datacatalog_info" table="fi_opengov_datacatalog_info">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="title" type="string">
+            <description>Short name of the information</description>
+        </property>
+        <property name="url" type="string">
+            <description>Web address of the information</description>        
+        </property>
+        <property name="type" type="string">
+            <description>Schema type of the information</description>
+        </property>
+    </type>    
+
+    <type name="fi_opengov_datacatalog_dataset_info" table="fi_opengov_datacatalog_dataset_info" parent="fi_opengov_datacatalog_dataset">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="dataset" type="unsigned integer" parentfield="dataset" link="fi_opengov_datacatalog_dataset:id">
+            <description>Dataset</description>
+        </property>
+        <property name="info" type="unsigned integer" link="fi_opengov_datacatalog_info:id">
+            <description>Corresponding information</description>
+        </property>
+    </type>    
+
 </Schema>
