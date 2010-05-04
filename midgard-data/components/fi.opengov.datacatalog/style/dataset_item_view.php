@@ -4,8 +4,8 @@
  */
     $dataset = $data['dataset'];
     $organization = $data['organization'];
-    //$license = $data['license'];
-    //$formats = $data['formats'];
+    $license = $data['license'];
+    $formats = $data['formats'];
     $open = $data['l10n']->get('yes');
     $class = $data['class'];
 ?>
@@ -20,12 +20,15 @@
   </div>
   <div class="format">
     <?php
-        foreach ($formats as $format)
+        if (count($formats))
         {
-            $list = '<a href="">' . "</a>, \n";
+            foreach ($formats as $format)
+            {
+                $list = '<a href="">' . "</a>, \n";
+            }
+            /* take away the last , */
+            echo substr($list, 0, -1);
         }
-        /* take away the last , */
-        echo substr($list, 0, -1);
     ?>
   </div>
   <div class="open">

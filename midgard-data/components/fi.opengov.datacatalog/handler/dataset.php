@@ -162,21 +162,17 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             foreach ($this->datasets as $dataset) 
             {
                 (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
+
                 $this->_request_data['dataset'] = $dataset;
 
-                /* fetch organization, license and format(s) info */
-                $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
-                $qb->add_constraint('id', '=', $dataset->organization);
-                $qb->add_constraint('type', '=', 'organization');
-                $_res = $qb->execute();
-//var_dump($_res);
-//die;
-
-                if (count($_res) == 1)
-                {
-                    $this->_request_data['organization']['title'] = $_res[0]->title;
-                    $this->_request_data['organization']['url'] = $_res[0]->url;
-                }
+                /* fetch organization info */
+                $this->_request_data['organization'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->organization, 'organization');
+                
+                /* fetch license info */
+                $this->_request_data['license'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'license');
+                
+                /* fetch formats info */
+                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'format');
                 
                 midcom_show_style('dataset_item_view');
             }

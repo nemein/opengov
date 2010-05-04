@@ -28,20 +28,20 @@ div.dataset_item div {
 
 div.dataset_list div.header .description,
 div.dataset_item .description {
-    width: 10em;
-    margin: 0 1em 0 0;
+    width: 14em;
 }
 
+div.dataset_list div.header .org,
 div.dataset_item .org {
     width: 10em;
-    margin: 0 1em 0 0;
 }
 
+div.dataset_list div.header .formats,
 div.dataset_item .formats {
     width: 6em;
-    margin: 0 1em 0 0;
 }
 
+div.dataset_list div.header .open,
 div.dataset_item .open {
     width: 4em;
 }
