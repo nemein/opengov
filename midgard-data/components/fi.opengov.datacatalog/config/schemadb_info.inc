@@ -7,7 +7,7 @@
         (
             'title' => 'title',
             'storage' => 'title',
-            'type' => 'string',
+            'type' => 'text',
             'widget' => 'text',
             'required' => true,
         ),
@@ -15,7 +15,7 @@
         (
             'title' => 'url',
             'storage' => 'url',
-            'type' => 'urlname',
+            'type' => 'text',
             'widget' => 'text',
             'required' => false,
         ),

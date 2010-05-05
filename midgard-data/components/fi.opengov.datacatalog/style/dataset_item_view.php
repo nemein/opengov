@@ -18,16 +18,25 @@
   <div class="org">
     &(organization['title']);
   </div>
-  <div class="format">
+  <div class="formats">
     <?php
+        //var_dump($formats);
         if (count($formats))
         {
+            $list = '';
             foreach ($formats as $format)
             {
-                $list = '<a href="">' . "</a>, \n";
+                if ($format->url != '')
+                {
+                    $list .= '<a href="' . $format->url . '">' . $format->title . "</a>, \n";
+                }
+                else
+                {
+                    $list .= $format->title . ", \n";
+                }
             }
             /* take away the last , */
-            echo substr($list, 0, -1);
+            echo trim(substr($list, 0, -3));
         }
     ?>
   </div>

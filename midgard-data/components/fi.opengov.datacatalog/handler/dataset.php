@@ -36,12 +36,14 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     /**
      * Loads some data
      */
-/*
     public function _load_object($handler_id, $args, &$data)
     {
-        return $this->_object;
+        $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
+        $qb->add_constraint('id', '=', $args[0]);
+        $_res = $qb->execute();
+        
+        $this->_object = $_res[0];
     }
-*/
 
     /**
      * Load the schmadb used in forms
@@ -111,9 +113,9 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     function &dm2_create_callback(&$controller)
     {
         $this->_object = new fi_opengov_datacatalog_dataset_dba();
-//        var_dump($_POST);
-//        die;
+
         $this->_object->organization = $_POST['fi_opengov_datacatalog_organization_chooser_widget_selections'][1];
+
         if (! $this->_object->create())
         {
             debug_push_class(__CLASS__, __FUNCTION__);
@@ -125,6 +127,17 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         }
 
         return $this->_object;
+    }
+
+    /**
+     * @param mixed $handler_id The ID of the handler.
+     * @param Array $args The argument list.
+     * @param Array &$data The local request data.
+     * @return boolean Indicating success.
+     */
+    function _handler_create($handler_id, $args, &$data)
+    {
+        return parent::_handler_create($handler_id, $args, &$data);
     }
 
     /**
@@ -146,6 +159,39 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
 
         return true;
     }
+
+    /**
+     * @param mixed $handler_id The ID of the handler.
+     * @param Array $args The argument list.
+     * @param Array &$data The local request data.
+     * @return boolean Indicating success.
+     */
+    function _handler_update($handler_id, $args, &$data)
+    {    
+        return parent::_handler_update($handler_id, $args, &$data);
+    }
+
+    /**
+     * @param mixed $handler_id The ID of the handler.
+     * @param Array $args The argument list.
+     * @param Array &$data The local request data.
+     * @return boolean Indicating success.
+     */
+    function _handler_delete($handler_id, $args, &$data)
+    {
+        return parent::_handler_delete($handler_id, $args, &$data);
+    }
+    
+   /**
+     * Displays the datasets create form
+     *
+     * @param mixed $handler_id The ID of the handler.
+     * @param mixed &$data The local request data.
+     */
+    public function _show_create($handler_id, &$data)
+    {
+        midcom_show_style('dataset_create');
+    }          
 
    /**
      * Displays the datasets page
@@ -172,7 +218,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 $this->_request_data['license'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'license');
                 
                 /* fetch formats info */
-                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'format');
+                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
                 
                 midcom_show_style('dataset_item_view');
             }
@@ -185,15 +231,15 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     }
 
    /**
-     * Displays the datasets create form
+     * Displays the datasets delete form
      *
      * @param mixed $handler_id The ID of the handler.
      * @param mixed &$data The local request data.
      */
-    public function _show_create($handler_id, &$data)
+    public function _show_update($handler_id, &$data)
     {
-        midcom_show_style('dataset_create');
-    }          
+        midcom_show_style('dataset_edit');
+    }            
 
    /**
      * Displays the datasets delete form
@@ -205,15 +251,4 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     {
         midcom_show_style('dataset_delete');
     }
-
-   /**
-     * Displays the datasets delete form
-     *
-     * @param mixed $handler_id The ID of the handler.
-     * @param mixed &$data The local request data.
-     */
-    public function _show_update($handler_id, &$data)
-    {
-        midcom_show_style('dataset_update');
-    }            
 }

@@ -37,16 +37,118 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'schema' => 'config',
             'fixed_args' => array('config'),
         );
-        // Handle /data
-        $this->_request_switch['data'] = array
+        // Handle /
+        $this->_request_switch[''] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
+        );
+        // Handle /{id}
+        $this->_request_switch['id'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
+            'fixed_args' => array('id'),
+            'variable_args' => 1,
         );
         // Handle /data/create
         $this->_request_switch['create'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'create'),
             'fixed_args' => array('create'),
+        );
+        // Handle /data/edit
+        $this->_request_switch['edit'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'update'),
+            'fixed_args' => array('edit'),
+            'variable_args' => 1,
+        );
+        // Handle /data/delete
+        $this->_request_switch['delete'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'delete'),
+            'fixed_args' => array('delete'),
+            'variable_args' => 1,
+        );
+        // Handle /organization/
+        $this->_request_switch['organization'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
+            'fixed_args' => array('organization'),
+            'variable_args' => 1,
+        );
+        // Handle /organization/create
+        $this->_request_switch['organization_create'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'create'),
+            'fixed_args' => array('organization', 'create'),
+        );
+        // Handle /organization/edit
+        $this->_request_switch['organization_edit'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'update'),
+            'fixed_args' => array('organization', 'edit'),
+            'variable_args' => 1,
+        );
+        // Handle /organization/delete
+        $this->_request_switch['organization_delete'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'delete'),
+            'fixed_args' => array('organization', 'delete'),
+            'variable_args' => 1,
+        );
+        // Handle /license/
+        $this->_request_switch['license'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
+            'fixed_args' => array('license'),
+            'variable_args' => 1,
+        );
+        // Handle /license/create
+        $this->_request_switch['license_create'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'create'),
+            'fixed_args' => array('license', 'create'),
+        );
+        // Handle /license/edit
+        $this->_request_switch['license_edit'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'update'),
+            'fixed_args' => array('license', 'edit'),
+            'variable_args' => 1,
+        );
+        // Handle /license/delete
+        $this->_request_switch['license_delete'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'delete'),
+            'fixed_args' => array('license', 'delete'),
+            'variable_args' => 1,
+        );
+        // Handle /format/
+        $this->_request_switch['format'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
+            'fixed_args' => array('format'),
+            //'variable_args' => 1,
+        );
+        // Handle /format/create
+        $this->_request_switch['format_create'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'create'),
+            'fixed_args' => array('format', 'create'),
+        );
+        // Handle /format/edit
+        $this->_request_switch['format_edit'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'update'),
+            'fixed_args' => array('format', 'edit'),
+            'variable_args' => 1,
+        );
+        // Handle /format/delete
+        $this->_request_switch['formate_delete'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_info', 'delete'),
+            'fixed_args' => array('format', 'delete'),
+            'variable_args' => 1,
         );
    }
 
