@@ -3,7 +3,7 @@
  * Available $data keys: $info
  */
     $info = $data['info'];
-    $class = $data['class'];
+    $class = $data['class'];    
 ?>
 
 <div class="info_item &(class);">
@@ -27,18 +27,22 @@
         switch ($data['type'])
         {
             case 'organization':
+                $organization_information = $data['organization_information'];
+                $organization_address = $data['organization_address'];
+                $organization_contact = $data['organization_contact'];
     ?>
 
-    <div class="information">&(info.information);</div>
-    <div class="address">&(info.address);</div>
-    <div class="contact">&(info.contact);</div>
+    <div class="information">&(organization_information);</div>
+    <div class="address">&(organization_address);</div>
+    <div class="contact">&(organization_contact);</div>
     
     <?php
                 break;
             case 'license':
+                $license_type = $data['license_type'];
     ?>
 
-    <div class="type">&(info.type);</div>
+    <div class="type">&(license_type);</div>
 
     <?php
                 break;

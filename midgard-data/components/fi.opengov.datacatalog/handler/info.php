@@ -37,28 +37,18 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _load_object($handler_id, $args, &$data)
     {
-        switch ($handler_id)
+        $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
+        $qb->add_constraint('id', '=', $args[0]);
+        $qb->add_constraint('type', '=', $this->_request_data['type']);
+        $_res = $qb->execute();
+        
+        if (count($_res))
         {
-            case 'organization':
-            case 'license':
-            case 'format':
-                $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
-                $qb->add_constraint('id', '=', $args[0]);
-                $qb->add_constraint('type', '=', $handler_id);
-                $_res = $qb->execute();
-                if (count($_res))
-                {
-                    $this->_object = $_res[0];
-                }
-                break;
+            $this->_object = $_res[0];
         }
-        if (! $this->_object)
+        else
         {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to read info object ('. $handler_id . '/' . $args[0] . ')');
-            //this will result in HTTP error 500
+            $this->_no_data($this->_request_data['type']);
         }
     }
 
@@ -69,8 +59,49 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     {
         $this->_request_data['schemadb'] = midcom_helper_datamanager2_schema::load_database($this->_config->get('schemadb_info'));
         $this->_schemadb =& $this->_request_data['schemadb'];
+
+        if ( ! array_key_exists($this->_request_data['type'], $this->_schemadb) )
+        {
+            debug_push_class(__CLASS__, __FUNCTION__);
+            debug_pop();
+            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
+                'Failed to read info object (handler: ' . $handler_id . ')');
+            //this will result in HTTP error 404
+        }
     }
 
+    /**
+     * Internal helper, loads the controller. Any error triggers a 500.
+     * @param handler_id
+     * @access private
+     */
+    function _load_controller($handler_id)
+    {
+        if ($this->_mode == 'create')
+        {
+            $type = 'create';
+        }
+        else
+        {
+            $type = 'simple';
+        }
+
+        $this->_request_data['controller'] =& midcom_helper_datamanager2_controller::create($type);
+        $this->_request_data['controller']->schemadb =& $this->_schemadb;
+        $this->_request_data['controller']->schemaname = $this->_request_data['type'];
+        $this->_request_data['controller']->callback_object =& $this;
+
+        if ($type == 'simple')
+        {
+            $this->_request_data['controller']->set_storage($this->_object, $this->_request_data['type']);
+        }
+
+        if (! $this->_request_data['controller']->initialize())
+        {
+            $_MIDCOM->generate_error(MIDCOM_ERRCRIT, "Failed to initialize a DM2 create controller.");
+        }
+    }
+    
     /**
      * Helper, updates the context so that we get a complete breadcrumb line towards the current
      * location.
@@ -115,16 +146,17 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     function &dm2_create_callback(&$controller)
     {
         $this->_object = new fi_opengov_datacatalog_info_dba();
+        $this->_object->type = $this->_request_data['type'];
+        
         if (! $this->_object->create())
         {
             debug_push_class(__CLASS__, __FUNCTION__);
             debug_print_r('We operated on this object:', $this->_object);
             debug_pop();
             $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to create a new info, cannot continue. Last Midgard error was: '. midcom_application::get_error_string());
+                'Failed to create a new info [' . $this->_request_data['type'] .'], cannot continue. Last Midgard error was: '. midcom_application::get_error_string());
             // This will exit.
         }
-
         return $this->_object;
     }
 
@@ -144,45 +176,9 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     {
         $this->_request_data['topic']->require_do('midgard:create');
 
-echo "handler_id: " . $handler_id;
-var_dump($args);
-die;
-        $type = '';
-        switch($handler_id)
-        {
-            case 'organization_create':
-                $type = 'organization';
-                break;
-            case 'license_create':
-                $type = 'license';
-                break;
-            case 'format_create':
-                $type = 'format';
-                break;
-        }
+        $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
-        if ($type != '')
-        {
-            $this->_load_controller('create');
-            $data['schema'] = $type;
-        }
-        else
-        {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to create a new info object. No type specified: (handler: ' . $handler_id . ')');
-            //this will result in HTTP error 500
-        }
-
-        if ( ! array_key_exists($type, $this->_schemadb) )
-        {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to create a new info object (handler: ' . $handler_id . ', type: ' . $type . ')');            
-            //this will result in HTTP error 500
-        }
+        $this->_load_schemadb();
 
         $data['defaults'] = Array();
 
@@ -192,7 +188,7 @@ die;
         {
             foreach ($_GET['defaults'] as $key => $value)
             {
-                if (! isset($this->_schemadb[$type]->fields[$key]))
+                if (! isset($this->_schemadb[$this->_request_data['type']]->fields[$key]))
                 {
                     // No such field in schema
                     continue;
@@ -202,7 +198,9 @@ die;
             }
         }
 
-        switch ($this->_controller->process_form())
+        $this->_load_controller($handler_id);
+        
+        switch ($this->_request_data['controller']->process_form())
         {
             case 'save':
                 break;
@@ -210,13 +208,11 @@ die;
                 break;
         }
 
-        $_MIDCOM->skip_page_style = true;
-
         return true;
     }
 
     /**
-     * The handler for listing datasets
+     * The handler for listing information
      *
      * @param mixed $handler_id the array key from the request array
      * @param array $args the arguments given to the handler
@@ -227,32 +223,15 @@ die;
     {
         $this->_request_data['topic']->require_do('midgard:read');
 
-        $this->_load_object($handler_id, $args, $data);
+        $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
-        if (! $this->_object)
-        {
-            $this->_no_data($handler_id);
-        }
+        $this->_load_object($handler_id, $args, $data);
 
         $this->_load_schemadb();
 
-
-        //$this->_load_controller();
-
-        if ( ! array_key_exists($handler_id, $this->_schemadb) )
-        {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to read info object (handler: ' . $handler_id . ')');
-            //this will result in HTTP error 500
-        }
-
         $this->_load_datamanager();
 
-        $this->_datamanager->set_schema($handler_id);
-
-        $this->_prepare_request_data();
+        $this->_datamanager->set_schema($this->_request_data['type']);
         
         if ($this->_controller)
         {
@@ -267,8 +246,6 @@ die;
         $this->_update_breadcrumb($handler_id);
         $this->_populate_toolbar($handler_id);
 
-        $_MIDCOM->skip_page_style = true;
-
         return true;
     }
 
@@ -278,55 +255,48 @@ die;
      * @param Array &$data The local request data.
      * @return boolean Indicating success.
      */
-    function _handler_edit($handler_id, $args, &$data)
+    function _handler_update($handler_id, $args, &$data)
     {
         $this->_request_data['topic']->require_do('midgard:update');
 
-        $this->_load_object($handler_id, $args, $data);
+        $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
-        if (! $this->_object)
+        switch($handler_id)
         {
-            $this->_no_data($handler_id);
+            case 'organization_edit_chooser':
+            case 'license_edit_chooser':
+            case 'format_edit_chooser':
+                $_MIDCOM->skip_page_style = true;
+                break;
         }
+
+        $this->_load_object($handler_id, $args, $data);
 
         $this->_load_schemadb();
 
-        if ( ! array_key_exists($handler_id, $this->_schemadb) )
-        {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to update info object (handler: ' . $handler_id . ')');            
-            //this will result in HTTP error 500
-        }
-
-        /* @todo: do something */
         $this->_load_datamanager();
 
-        $this->_datamanager->set_schema($handler_id);
+        $this->_datamanager->set_schema($this->_request_data['type']);
 
-        $this->_prepare_request_data();
-        
+        $this->_load_controller($handler_id);
+
         if ($this->_controller)
         {
             // For AJAX handling it is the controller that renders everything
             $this->_request_data['object_view'] = $this->_controller->get_content_html();
+            switch ($this->_controller->process_form())
+            {
+                case 'save':
+                    break;
+                case 'cancel':
+                    break;
+            }
         }
         else
         {
             $this->_request_data['object_view'] = $this->_datamanager->get_content_html();
         }
-      
-        switch ($this->_controller->process_form())
-        {
-            case 'save':
-                break;
-            case 'cancel':
-                break;
-        }
-        
-        $_MIDCOM->skip_page_style = true;
-
+              
         return true;
     }
 
@@ -340,33 +310,24 @@ die;
     {
         $this->_request_data['topic']->require_do('midgard:delete');
 
-echo "handler_id: " . $handler_id;
-var_dump($args);
-die;
+        $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
+
+        switch($handler_id)
+        {
+            case 'organization_delete_chooser':
+            case 'license_delete_chooser':
+            case 'format_delete_chooser':
+                $_MIDCOM->skip_page_style = true;
+                break;
+        }
 
         $this->_load_object($handler_id, $args, $data);
 
-        if (! $this->_object)
-        {
-            $this->_no_data($handler_id);
-        }
-
         $this->_load_schemadb();
-
-        if ( ! array_key_exists($type, $this->_schemadb) )
-        {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to delete info object (handler: ' . $handler_id . ', type: ' . $type . ')');            
-            //this will result in HTTP error 500
-        }
 
         $this->_load_datamanager();
 
-        $this->_datamanager->set_schema($handler_id);
-
-        $this->_prepare_request_data();
+        $this->_datamanager->set_schema($this->_request_data['type']);
         
         if ($this->_controller)
         {
@@ -386,8 +347,6 @@ die;
             }
         }
         
-        $_MIDCOM->skip_page_style = true;
-        
         return true;
     }
 
@@ -399,44 +358,28 @@ die;
      */
     public function _show_read($handler_id, &$data)
     {        
-        $this->_request_data['type'] = $handler_id;
-        $this->_request_data['class'] = 'odd';
-        
-        switch ($handler_id)
+        if ($this->_object)
         {
-            case 'organization':
-            case 'license':
-            case 'format':
-                if ($this->_object)
-                {
-                    $this->_request_data['info'] = $this->_object;
-                    midcom_show_style('info_item_view');
-                }
-                else
-                {
-                    midcom_show_style('no_info');
-                }
-                break;
-/*
-            case 'format':                
-                $formats = array();
-                if (count($formats))
-                {
-                    midcom_show_style('info_list_header');
-                    foreach ($formats as $format)
-                    {
-                        $i = 0;
-                        (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
-                        midcom_show_style('info_item_view');
-                    }
-                    midcom_show_style('info_list_footer');
-                }
-                else
-                {
-                    midcom_show_style('no_info');
-                }
-                break;
-*/
+            switch ($this->_request_data['type'])
+            {
+                case 'organization':
+                    $this->_request_data['organization_information'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'information');
+                    $this->_request_data['organization_address'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'address');
+                    $this->_request_data['organization_contact'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'contact');
+                    break;
+                case 'license':
+                    $this->_request_data['license_type'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'type');
+                    break;
+                case 'format':
+                    break;
+            }
+            $this->_request_data['class'] = 'odd';
+            $this->_request_data['info'] = $this->_object;
+            midcom_show_style('info_item_view');
+        }
+        else
+        {
+            midcom_show_style('no_info');
         }
     }
 
@@ -450,7 +393,7 @@ die;
     {
         if ($this->_object)
         {
-            $data['jsdata'] = $this->object_to_jsdata($this->schemadb, $this->_object);
+            $data['jsdata'] = $this->object_to_jsdata($this->_schemadb, $this->_object);
             midcom_show_style('info_create_after');
         } else
         {  
@@ -477,7 +420,7 @@ die;
      */
     public function _show_update($handler_id, &$data)
     {
-        midcom_show_style('info_update');
+        midcom_show_style('info_edit');
     }                
 
    /**
@@ -505,9 +448,10 @@ die;
         $jsdata .= "guid: '{$guid}',";
         $jsdata .= "pre_selected: true,";
     
-        $hi_count = count($this->_request_data[$schemadb][$this->_request_data['schema']]->fields);
+        $hi_count = count($this->_schemadb[$this->_request_data['type']]->fields);
         $i = 1;
-        foreach ($this->_request_data[$schemadb][$this->_request_data['schema']]->fields as $field => $field_data)
+
+        foreach ($this->_schemadb[$this->_request_data['type']]->fields as $field => $field_data)
         {
             $value = @$object->$field;
             $value = rawurlencode($value);

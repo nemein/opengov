@@ -85,3 +85,11 @@
         ),
     ),
 ),
+'format' => array
+(
+    'description' => 'format',
+    'extends' => array
+    (
+        'name' => 'info',
+    ),    
+),
