@@ -174,9 +174,20 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     function _handler_create($handler_id, $args, &$data)
     {
+        $this->_mode = 'create';
+
         $this->_request_data['topic']->require_do('midgard:create');
 
         $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
+
+        switch($handler_id)
+        {
+            case 'organization_create_chooser':
+            case 'license_create_chooser':
+            case 'format_create_chooser':
+                $_MIDCOM->skip_page_style = true;
+                break;
+        }
 
         $this->_load_schemadb();
 
@@ -205,6 +216,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
             case 'save':
                 break;
             case 'cancel':
+                /* @todo: redirect somewhere; close the chooser dialog */
                 break;
         }
 
@@ -289,6 +301,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
                 case 'save':
                     break;
                 case 'cancel':
+                    /* @todo: redirect somewhere; close the chooser dialog */
                     break;
             }
         }
@@ -343,8 +356,9 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         {
             if ($this->_object->delete())
             {
-                /* @todo */
+                /* @todo: redirect somewhere */
             }
+            /* @todo: what happens at cancel? */
         }
         
         return true;
