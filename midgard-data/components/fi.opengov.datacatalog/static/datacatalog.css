@@ -46,3 +46,14 @@ div.dataset_item .open {
     width: 4em;
 }
 
+div.dataset_item_detail div {
+    margin: 0 0 1em 0;
+}
+
+div.dataset_item_detail .license {
+    float: none;
+}
+
+div.dataset_item_detail .license span.free {
+    background-image: url('/midcom-static/fi.opengov.datacatalog/icn_thumbup.png');
+}

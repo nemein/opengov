@@ -37,6 +37,18 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
             $details['title'] = $_res[0]->title;
             $details['url'] = $_res[0]->url;
 
+            switch($type)
+            {
+                case 'organization':
+                    $details['information'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_information');
+                    $details['address'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_address');
+                    $details['contact'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_contact');
+                    break;
+                case 'license':
+                    $details['type'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'license_type');
+                    break;
+            }
+
             unset($_res);
             unset($qb);
         }        
@@ -65,8 +77,10 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
                 $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
                 $qb->add_constraint('id', '=', $info->info);
                 $qb->add_constraint('type', '=', $type);
-                $formats = $qb->execute();
+                $_formats = $qb->execute();
+                $formats[] = $_formats[0];
             }
+            unset($_formats);
             unset($_res);
             unset($qb);
         }        

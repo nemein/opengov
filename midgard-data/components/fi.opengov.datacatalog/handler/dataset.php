@@ -42,7 +42,18 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         $qb->add_constraint('id', '=', $args[0]);
         $_res = $qb->execute();
         
-        $this->_object = $_res[0];
+        if (count($_res))
+        {
+            $this->_object = $_res[0];
+        }
+        else
+        {
+            debug_push_class(__CLASS__, __FUNCTION__);
+            debug_pop();
+            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
+                'Failed to read dataset object (handler: ' . $handler_id . '/' . $args[0] . ')');
+            //this will result in HTTP error 404
+        }
     }
 
     /**
@@ -113,8 +124,11 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     function &dm2_create_callback(&$controller)
     {
         $this->_object = new fi_opengov_datacatalog_dataset_dba();
-
-        $this->_object->organization = $_POST['fi_opengov_datacatalog_organization_chooser_widget_selections'][1];
+        $this->_object->title = $_POST['title'];
+        $this->_object->description = $_POST['description'];
+        $this->_object->url = $_POST['url'];
+        $this->_object->organization = array_pop($_POST['fi_opengov_datacatalog_organization_chooser_widget_selections']);
+        $this->_object->license = array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
 
         if (! $this->_object->create())
         {
@@ -150,8 +164,15 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _handler_read($handler_id, $args, &$data)
     {
-        /* get all datasets */
         $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
+
+        switch($handler_id)
+        {
+            case 'id':
+                $qb->add_constraint('id', '=', $args[0]);
+                break;
+        }
+
         $this->datasets = $qb->execute();
 
         $this->_update_breadcrumb($handler_id);
@@ -203,12 +224,13 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     {
         if (isset($this->datasets))
         {
-            midcom_show_style('dataset_list_header');
+            if ($handler_id != 'id')
+            {
+                midcom_show_style('dataset_list_header');
+            }
             $i = 0;
             foreach ($this->datasets as $dataset) 
             {
-                (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
-
                 $this->_request_data['dataset'] = $dataset;
 
                 /* fetch organization info */
@@ -219,10 +241,22 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 
                 /* fetch formats info */
                 $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
-                
-                midcom_show_style('dataset_item_view');
+
+                /* show different page when viewing only 1 dataset */
+                if ($handler_id == 'id')
+                {
+                    midcom_show_style('dataset_item_detailed_view');
+                }
+                else
+                {
+                    (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
+                    midcom_show_style('dataset_item_view');
+                }
             }
-            midcom_show_style('dataset_list_footer');
+            if ($handler_id != 'id')
+            {
+                midcom_show_style('dataset_list_footer');
+            }
         }
         else 
         {

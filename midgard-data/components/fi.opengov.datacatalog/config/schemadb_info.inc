@@ -33,15 +33,20 @@
         'type' => array
         (
             'title' => 'type',
-            'storage' => 'parameter',
+            'storage'    => array
+            (
+                'location' => 'parameter',
+                'domain' => 'fi.opengov.datacatalog',
+                'name'    => 'license_type',
+            ),
             'type' => 'select',
             'type_config' => array
             (
                 'allow_multiple' => false,
                 'options' => array
                 (
-                    'open' => 'open',
-                    'close' => 'close',
+                    'free' => 'free',
+                    'non-free' => 'non-free',
                 ),
             ),
             'widget' => 'select',
@@ -62,15 +67,29 @@
         'information' => array
         (
             'title' => 'information',
-            'storage' => 'parameter',
+            'storage'    => array
+            (
+                'location' => 'parameter',
+                'domain' => 'fi.opengov.datacatalog',
+                'name'    => 'org_information',
+            ),
             'type' => 'text',
-            'widget' => 'text',
+            'type_config' => Array
+            (
+                'output_mode' => 'html',
+            ),
+            'widget' => 'tinymce',
             'required' => true,
         ),
         'address' => array
         (
             'title' => 'address',
-            'storage' => 'parameter',
+            'storage'    => array
+            (
+                'location' => 'parameter',
+                'domain' => 'fi.opengov.datacatalog',
+                'name'    => 'org_address',
+            ),
             'type' => 'text',
             'widget' => 'text',
             'required' => true,
@@ -78,7 +97,12 @@
         'contact' => array
         (
             'title' => 'contact',
-            'storage' => 'parameter',
+            'storage'    => array
+            (
+                'location' => 'parameter',
+                'domain' => 'fi.opengov.datacatalog',
+                'name'    => 'org_contact',
+            ),
             'type' => 'text',
             'widget' => 'text',
             'required' => true,

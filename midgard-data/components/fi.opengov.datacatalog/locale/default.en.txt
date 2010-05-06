@@ -10,6 +10,18 @@ Yes
 No
 ---STRINGEND
 
+---STRING url
+URL
+---STRINGEND
+
+---STRING no_dataset
+No dataset has been recorded.
+---STRINGEND
+
+---STRING no_info
+No information was recorded
+---STRINGEND
+
 ---STRING dataset_list
 Datasets
 ---STRINGEND
@@ -28,6 +40,14 @@ Organization
 
 ---STRING dataset_formats
 Format(s)
+---STRINGEND
+
+---STRING dataset_license
+License
+---STRINGEND
+
+---STRING dataset_additional_info
+Additional Information
 ---STRINGEND
 
 ---STRING dataset_open

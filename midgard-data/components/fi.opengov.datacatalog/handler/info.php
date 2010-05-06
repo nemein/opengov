@@ -48,7 +48,11 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         }
         else
         {
-            $this->_no_data($this->_request_data['type']);
+            debug_push_class(__CLASS__, __FUNCTION__);
+            debug_pop();
+            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
+                'Failed to read info object (handler: ' . $handler_id . '/' . $args[0] . ')');
+            //this will result in HTTP error 404
         }
     }
 
@@ -191,7 +195,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         $this->_load_schemadb();
 
-        $data['defaults'] = Array();
+        $data['defaults'] = array();
 
         // Allow setting defaults from query string, useful for things like "create event for today" and chooser
         if (   isset($_GET['defaults'])
@@ -270,7 +274,6 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     function _handler_update($handler_id, $args, &$data)
     {
         $this->_request_data['topic']->require_do('midgard:update');
-
         $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
         switch($handler_id)
@@ -283,13 +286,9 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         }
 
         $this->_load_object($handler_id, $args, $data);
-
         $this->_load_schemadb();
-
         $this->_load_datamanager();
-
         $this->_datamanager->set_schema($this->_request_data['type']);
-
         $this->_load_controller($handler_id);
 
         if ($this->_controller)
@@ -322,7 +321,6 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     function _handler_delete($handler_id, $args, &$data)
     {
         $this->_request_data['topic']->require_do('midgard:delete');
-
         $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
         switch($handler_id)
@@ -335,11 +333,8 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         }
 
         $this->_load_object($handler_id, $args, $data);
-
         $this->_load_schemadb();
-
         $this->_load_datamanager();
-
         $this->_datamanager->set_schema($this->_request_data['type']);
         
         if ($this->_controller)
@@ -377,12 +372,12 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
             switch ($this->_request_data['type'])
             {
                 case 'organization':
-                    $this->_request_data['organization_information'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'information');
-                    $this->_request_data['organization_address'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'address');
-                    $this->_request_data['organization_contact'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'contact');
+                    $this->_request_data['organization_information'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_information');
+                    $this->_request_data['organization_address'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_address');
+                    $this->_request_data['organization_contact'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_contact');
                     break;
                 case 'license':
-                    $this->_request_data['license_type'] = $this->_object->get_parameter('midcom.helper.datamanager2', 'type');
+                    $this->_request_data['license_type'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'license_type');
                     break;
                 case 'format':
                     break;
@@ -436,17 +431,6 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     {
         midcom_show_style('info_edit');
     }                
-
-   /**
-     * Displays the no data page
-     *
-     * @param mixed $handler_id The ID of the handler.
-     */
-    public function _no_data($handler_id)
-    {
-        $this->_request_data['type'] = $handler_id;
-        midcom_show_style('no_info');
-    }
     
     /**
      * @todo: docs

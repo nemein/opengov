@@ -16,7 +16,7 @@
             'title' => 'description',
             'storage' => 'description',
             'type'    => 'text',
-            'widget'  => 'text',
+            'widget' => 'text',
             'required' => true,
         ),
         'url' => array
@@ -174,6 +174,7 @@
                         'value' => 'format',
                     ),
                 ),
+                'default_search' => '**',
                 'creation_mode_enabled' => true,
                 'creation_handler' => "{$_MIDGARD['self']}data/format/create/chooser/",
                 'creation_default_key' => 'title',               
