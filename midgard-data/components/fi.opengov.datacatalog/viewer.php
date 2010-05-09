@@ -49,20 +49,20 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('id'),
             'variable_args' => 1,
         );
-        // Handle /data/create
+        // Handle /create
         $this->_request_switch['create'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'create'),
             'fixed_args' => array('create'),
         );
-        // Handle /data/edit
+        // Handle /edit
         $this->_request_switch['edit'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'update'),
             'fixed_args' => array('edit'),
             'variable_args' => 1,
         );
-        // Handle /data/delete
+        // Handle /delete
         $this->_request_switch['delete'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'delete'),
@@ -288,7 +288,7 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
     }
 
     /**
-     * The handle callback populates the toolbars.
+     * The handle callback populates the toolbars
      */
     function _on_handle($handler, $args)
     {
@@ -298,7 +298,7 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
     }
 
     /**
-     * Loads styles used in basecamp
+     * Loads styles used in datacatalog
      *
      * @access protected
      */
