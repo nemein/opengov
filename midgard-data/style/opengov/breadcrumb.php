@@ -1,4 +1,4 @@
-<div id="breadcrumb">
+<div class="breadcrumb">
 <?php
   if (strpos($_MIDCOM->metadata->get_page_class(), 'frontpage') === false)
   {

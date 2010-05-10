@@ -10,6 +10,26 @@ Yes
 No
 ---STRINGEND
 
+---STRING welcome
+Welcome - opengov
+---STRINGEND
+
+---STRING slogan_fin
+Slogan in Finnish
+---STRINGEND
+
+---STRING slogan_eng
+Slogan in English
+---STRINGEND
+
+---STRING search
+Search
+---STRINGEND
+
+---STRING search
+Search
+---STRINGEND
+
 ---STRING url
 URL
 ---STRINGEND
@@ -30,23 +50,23 @@ Datasets
 Latest Additions
 ---STRINGEND
 
----STRING dataset_description
+---STRING description
 Description
 ---STRINGEND
 
----STRING dataset_organization
+---STRING organization
 Organization
 ---STRINGEND
 
----STRING dataset_formats
+---STRING format
 Format(s)
 ---STRINGEND
 
----STRING dataset_license
+---STRING license
 License
 ---STRINGEND
 
----STRING dataset_additional_info
+---STRING additional_info
 Additional Information
 ---STRINGEND
 
@@ -64,6 +84,10 @@ View Datasets
 
 ---STRING create_dataset
 Create Dataset
+---STRINGEND
+
+---STRING edit_dataset
+Edit Dataset
 ---STRINGEND
 
 ---STRING news

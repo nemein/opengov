@@ -7,14 +7,29 @@
     'description' => 'Default Configuration Schema', /* This is a topic */
     'fields'      => Array
     ( 
-        /* This is the field for the sort order selection. Note, that the description
-         * and the widget fields will be translated automatically.
-         *
-         * Name must match the corresponding configuration key, the domain
-         * must match your component.
-         *
-         * Name of the field and its description is kept as-is, as the clear-text name is
-         * set through the l10n database of this component.
-         */
+        'slogan_fin' => array
+        (
+            'title' => 'slogan_fin',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'slogan_fin',
+            ),
+            'type' => 'text',
+            'widget' => 'text',
+        ),         
+        'slogan_eng' => array
+        (
+            'title' => 'slogan_eng',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'slogan_eng',
+            ),
+            'type' => 'text',
+            'widget' => 'text',
+        ),         
     )
 ),

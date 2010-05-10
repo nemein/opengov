@@ -2,7 +2,7 @@
 
     <(content)>
 
-    <h2><?php echo $data['l10n']->get('news');?></h2>
+    <h2><?php echo $_MIDCOM->i18n->get_string('news', 'fi.opengov.datacatalog'); ?></h2>
 
     <div class="blogposts">
         <(blog-posts)>

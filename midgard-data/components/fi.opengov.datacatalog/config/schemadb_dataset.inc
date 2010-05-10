@@ -45,7 +45,7 @@
             (
                 'options' => array(),
                 'require_corresponding_option' => false,
-                'allow_other' => true,
+                'allow_other' => false,
                 'allow_multiple' => false,
             ),
             'widget' => 'chooser',
@@ -90,10 +90,10 @@
             'type' => 'select',
             'type_config' => array
             (
-                'options' => array(),
-                'require_corresponding_option' => false,
-                'allow_other' => true,
                 'allow_multiple' => false,
+                'allow_other' => false,
+                'require_corresponding_option' => false,
+                'options' => array(),
             ),
             'widget' => 'chooser',
             'widget_config' => array
@@ -143,7 +143,7 @@
                 'master_is_id' => true,
                 'options' => array(),
                 'require_corresponding_option' => false,
-                'allow_other' => true,
+                'allow_other' => false,
                 'allow_multiple' => true,
             ),
             'widget' => 'chooser',

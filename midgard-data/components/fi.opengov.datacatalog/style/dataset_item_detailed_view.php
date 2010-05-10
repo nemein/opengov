@@ -16,11 +16,11 @@
     &(dataset.description);
   </div>
   <div class="org">
-    <label><?php echo $data['l10n']->get('dataset_organization'); ?></label>
+    <label><?php echo $data['l10n']->get('organization'); ?></label>
     &(organization['title']);
   </div>
   <div class="formats">
-    <label><?php echo $data['l10n']->get('dataset_formats'); ?></label>
+    <label><?php echo $data['l10n']->get('formats'); ?></label>
     <?php
         if (count($formats))
         {
@@ -41,11 +41,11 @@
     ?>
   </div>
   <div class="license">
-    <label><?php echo $data['l10n']->get('dataset_license'); ?></label>
+    <label><?php echo $data['l10n']->get('license'); ?></label>
     <span class="&(license['type']);">&(license['title']);</span>
   </div>
   <div class="url">
-    <label><?php echo $data['l10n']->get('dataset_additional_info'); ?></label>
+    <label><?php echo $data['l10n']->get('additional_info'); ?></label>
     <a href="&(dataset.url);">&(dataset.url);</a>
   </div>
 </div>

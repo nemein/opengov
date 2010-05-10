@@ -2,7 +2,7 @@
 <html lang="fi">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-        <title>Tervetuloa - opengov</title>
+        <title><?php echo $_MIDCOM->i18n->get_string('welcome', 'fi.opengov.datacatalog'); ?></title>
         <?php
         $_MIDCOM->print_head_elements();
         ?> 
@@ -24,7 +24,7 @@
                 </div>
                 <div class="yui-gc">
                     <div class="yui-u first">
-                        <(page-content)>
+                        <(content)>
                     </div>
                     <div class="yui-u sidebar">
                         <(page-sidebar)>

@@ -1,0 +1,8 @@
+.chooser_widget_headers {
+    display: none;
+}
+
+.chooser_widget_results .chooser_widget_result_item {
+    width: 10em;
+}
+
