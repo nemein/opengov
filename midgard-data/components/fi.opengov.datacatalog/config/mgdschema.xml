@@ -49,4 +49,28 @@
         </property>
     </type>    
 
+    <type name="fi_opengov_datacatalog_suggestion" table="fi_opengov_datacatalog_suggestion">
+        <property name="id" type="unsigned integer" primaryfield="id">
+            <description>Local non-replication-safe database identifier</description>
+        </property>
+        <property name="title" type="string">
+            <description>Short title of the suggestion</description>
+        </property>
+        <property name="organization" type="string">
+            <description>The organization publishing the dataset</description>
+        </property>
+        <property name="description" type="text">
+            <description>Textual description of the suggestion</description>
+        </property>
+        <property name="url" type="string">
+            <description>Web address to the suggested dataset</description>
+        </property>
+        <property name="name" type="string">
+            <description>Name of the submitter</description>
+        </property>
+        <property name="email" type="string">
+            <description>Email address of the submitter</description>
+        </property>
+    </type>
+
 </Schema>

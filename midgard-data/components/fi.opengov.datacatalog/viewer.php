@@ -211,6 +211,12 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('format', 'delete', 'chooser'),
             'variable_args' => 1,
         );
+        // Handle /suggest
+        $this->_request_switch['suggest'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_suggestion', 'create'),
+            'fixed_args' => array('suggest'),
+        );
    }
 
     /**

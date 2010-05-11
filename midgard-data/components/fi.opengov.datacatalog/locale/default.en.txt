@@ -97,3 +97,7 @@ News
 ---STRING blog_title
 News
 ---STRINGEND
+
+---STRING discuss %s comment
+Discuss (%s comment(s))
+---STRINGEND

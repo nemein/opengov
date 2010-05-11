@@ -10,12 +10,23 @@
 <div class="separator"></div>
 
 <?php
-    $lang = $_MIDCOM->i18n->get_current_language();
+    global $bloginfo;
+
+    /* the index-item style will set $number_of_comments */
     $_MIDCOM->dynamic_load('midcom-substyle-blog/blog/latest/1', array('cache_module_content_caching_strategy' => 'public'));
 
-    global $number_of_comments;
-    if (isset($number_of_comments))
+    $url = $bloginfo['url'];
+    $comments = $bloginfo['comments'];
+
+    if (   isset($bloginfo['url'])
+        && isset($bloginfo['comments']))
     {
-        echo "Comments: " . $number_of_comments;
+?>
+
+<div class="discuss">
+    <a href="&(url);"><?php echo sprintf($_MIDCOM->i18n->get_string('discuss %s comment', 'fi.opengov.datacatalog'), $comments); ?></a>
+</div>
+
+<?php
     }
 ?>

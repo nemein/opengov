@@ -3,15 +3,14 @@
 $view = $data['datamanager']->get_content_html();
 $view_counter = $data['article_counter'];
 $article_count = $data['article_count'];
-//var_dump($data['article']);
-//die;
-$qb = net_nehmer_comments_comment::new_query_builder();
-$qb->add_constraint('objectguid', '=', $data['article']->guid);
-$res = $qb->execute();
-global $number_of_comments;
-$number_of_comments = count($res);
 
-unset($res);
+/*
+ * this array contains the title and number of comments
+ * of the blog post shown on the frontpage
+ */
+global $bloginfo;
+$bloginfo['url'] = $data['view_url'];
+$bloginfo['comments'] = net_nehmer_comments_comment::count_by_objectguid($data['article']->guid);
 
 $class_str = '';
 if (function_exists('$_MIDCOM->metadata->get_object_classes()'))

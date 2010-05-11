@@ -34,5 +34,9 @@
     </p>
     <div class="comments latest">
         <h2>Uusimmat kommentit</h2>
+        <?php
+            /* the index-item style will set $number_of_comments */
+            $_MIDCOM->dynamic_load('midcom-substyle-comments/blog/comments/latest/10', array('cache_module_content_caching_strategy' => 'public'));
+        ?>
     </div>
 </div>
