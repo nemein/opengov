@@ -30,14 +30,14 @@
     ),    
     'fields' => array
     (
-        'type' => array
+        'license_type' => array
         (
             'title' => 'type',
             'storage'    => array
             (
                 'location' => 'parameter',
                 'domain' => 'fi.opengov.datacatalog',
-                'name'    => 'license_type',
+                'name' => 'license_type',
             ),
             'type' => 'select',
             'type_config' => array
@@ -64,7 +64,7 @@
     ),    
     'fields' => array
     (
-        'information' => array
+        'org_information' => array
         (
             'title' => 'information',
             'storage'    => array
@@ -81,7 +81,7 @@
             'widget' => 'tinymce',
             'required' => true,
         ),
-        'address' => array
+        'org_address' => array
         (
             'title' => 'address',
             'storage'    => array
@@ -94,7 +94,7 @@
             'widget' => 'text',
             'required' => true,
         ),
-        'contact' => array
+        'org_contact' => array
         (
             'title' => 'contact',
             'storage'    => array

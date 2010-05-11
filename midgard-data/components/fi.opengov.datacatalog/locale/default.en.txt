@@ -94,3 +94,6 @@ Edit Dataset
 News
 ---STRINGEND
 
+---STRING blog_title
+News
+---STRINGEND

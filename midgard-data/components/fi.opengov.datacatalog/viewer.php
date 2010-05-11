@@ -15,6 +15,7 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
 {
     function __construct($topic, $config)
     {
+        error_reporting(E_ERROR);
         parent::__construct($topic, $config);
     }
 
@@ -42,11 +43,11 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
         );
-        // Handle /id
-        $this->_request_switch['id'] = array
+        // Handle /view
+        $this->_request_switch['view'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
-            'fixed_args' => array('id'),
+            'fixed_args' => array('view'),
             'variable_args' => 1,
         );
         // Handle /create
@@ -69,11 +70,11 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('delete'),
             'variable_args' => 1,
         );
-        // Handle /organization/id
-        $this->_request_switch['organization_id'] = array
+        // Handle /organization/view
+        $this->_request_switch['organization_view'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
-            'fixed_args' => array('organization', 'id'),
+            'fixed_args' => array('organization', 'view'),
             'variable_args' => 1,
         );
         // Handle /organization/create
@@ -116,11 +117,11 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('organization', 'delete', 'chooser'),
             'variable_args' => 1,
         );
-        // Handle /license/id
-        $this->_request_switch['license_id'] = array
+        // Handle /license/view
+        $this->_request_switch['license_view'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
-            'fixed_args' => array('license', 'id'),
+            'fixed_args' => array('license', 'view'),
             'variable_args' => 1,
         );
         // Handle /license/create
@@ -163,11 +164,11 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('license', 'delete', 'chooser'),
             'variable_args' => 1,
         );
-        // Handle /format/id
-        $this->_request_switch['format_id'] = array
+        // Handle /format/view
+        $this->_request_switch['format_view'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
-            'fixed_args' => array('format', 'id'),
+            'fixed_args' => array('format', 'view'),
             'variable_args' => 1,
         );
         // Handle /format/create

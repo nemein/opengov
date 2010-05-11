@@ -12,7 +12,7 @@
 
 <div class="dataset_item &(class);">
   <div class="description">
-    <a class="title" href="/data/id/&(dataset.id);">&(dataset.title);</a>
+    <a class="title" href="/data/view/&(dataset.id);">&(dataset.title);</a>
     &(dataset.description);
   </div>
   <div class="org">

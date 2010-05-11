@@ -13,6 +13,9 @@
  */
 class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_handler_crud
 {
+    /* the action that is set when a form is submitted */
+    var $_action = null;
+
     /* the schema db that contain all schemas */
     var $_schemadb = null;
 
@@ -179,9 +182,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     function _handler_create($handler_id, $args, &$data)
     {
         $this->_mode = 'create';
-
         $this->_request_data['topic']->require_do('midgard:create');
-
         $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
 
         switch($handler_id)
@@ -214,16 +215,12 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         }
 
         $this->_load_controller($handler_id);
-        
-        switch ($this->_request_data['controller']->process_form())
-        {
-            case 'save':
-                break;
-            case 'cancel':
-                /* @todo: redirect somewhere; close the chooser dialog */
-                break;
-        }
 
+        if ($this->_request_data['controller'])
+        {
+            $data['action'] = $this->_request_data['controller']->process_form();
+        }
+        
         return true;
     }
 
@@ -238,27 +235,12 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     function _handler_read($handler_id, $args, &$data)
     {
         $this->_request_data['topic']->require_do('midgard:read');
-
         $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
-
         $this->_load_object($handler_id, $args, $data);
-
         $this->_load_schemadb();
-
         $this->_load_datamanager();
-
         $this->_datamanager->set_schema($this->_request_data['type']);
-        
-        if ($this->_controller)
-        {
-            // For AJAX handling it is the controller that renders everything
-            $this->_request_data['object_view'] = $this->_controller->get_content_html();
-        }
-        else
-        {
-            $this->_request_data['object_view'] = $this->_datamanager->get_content_html();
-        }
-
+        $this->_load_controller($handler_id);
         $this->_update_breadcrumb($handler_id);
         $this->_populate_toolbar($handler_id);
 
@@ -287,27 +269,16 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         $this->_load_object($handler_id, $args, $data);
         $this->_load_schemadb();
-        $this->_load_datamanager();
-        $this->_datamanager->set_schema($this->_request_data['type']);
+//        $this->_load_datamanager();
+//        $this->_datamanager->set_schema($this->_request_data['type']);
         $this->_load_controller($handler_id);
 
-        if ($this->_controller)
+        if ($this->_request_data['controller'])
         {
-            // For AJAX handling it is the controller that renders everything
-            $this->_request_data['object_view'] = $this->_controller->get_content_html();
-            switch ($this->_controller->process_form())
-            {
-                case 'save':
-                    break;
-                case 'cancel':
-                    /* @todo: redirect somewhere; close the chooser dialog */
-                    break;
-            }
+            $this->_action = $this->_request_data['controller']->process_form();
         }
-        else
-        {
-            $this->_request_data['object_view'] = $this->_datamanager->get_content_html();
-        }
+
+        $this->_request_data['object'] =& $this->_object;
               
         return true;
     }
@@ -334,25 +305,17 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         $this->_load_object($handler_id, $args, $data);
         $this->_load_schemadb();
-        $this->_load_datamanager();
-        $this->_datamanager->set_schema($this->_request_data['type']);
-        
-        if ($this->_controller)
-        {
-            // For AJAX handling it is the controller that renders everything
-            $this->_request_data['object_view'] = $this->_controller->get_content_html();
-        }
-        else
-        {
-            $this->_request_data['object_view'] = $this->_datamanager->get_content_html();
-        }
-      
+//        $this->_load_datamanager();
+//        $this->_datamanager->set_schema($this->_request_data['type']);
+              
         if (array_key_exists('fi_opengov_datacatalog_info_delete_ok', $_POST))
         {
             if ($this->_object->delete())
             {
                 /* @todo: redirect somewhere */
+                $_MIDCOM->relocate('');
             }
+            $_MIDCOM->relocate('');            
             /* @todo: what happens at cancel? */
         }
         
@@ -429,7 +392,16 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _show_update($handler_id, &$data)
     {
-        midcom_show_style('info_edit');
+        switch ($this->_action)
+        {
+            case 'save': 
+            case 'cancel':
+                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                //midcom_show_style('info_edit_after');
+                break;
+            default:
+                midcom_show_style('info_edit');
+        }
     }                
     
     /**

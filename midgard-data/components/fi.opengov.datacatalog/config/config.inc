@@ -2,9 +2,6 @@
 'schemadb_dataset' => 'file:/fi/opengov/datacatalog/config/schemadb_dataset.inc',
 'schemadb_info' => 'file:/fi/opengov/datacatalog/config/schemadb_info.inc',
 
-'dataset_schema' => 'dataset',
-'info_schema' => 'info',
-
 'use_default_style' => true,
 
 /* icons */

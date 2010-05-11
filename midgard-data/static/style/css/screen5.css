@@ -74,14 +74,16 @@ caption {
 
 /* Custom column widths */
 .yui-t7 .yui-gc .yui-u {
-	margin:auto;text-align:left; /* leave unchanged */
+	margin:auto;
+    text-align:left; /* leave unchanged */
 	width:44.1538em;/* non-IE */
 	min-width:574px;/* optional but recommended */	
 }
 
 
 .yui-t7 .yui-gc .sidebar {
-	margin:auto;text-align:left;
+	margin:auto;
+    text-align:left;
 	width:29.76em;
 	min-width:350px;
 }
@@ -259,16 +261,16 @@ img.center {
 	font-family:Arial, Helvetica, sans-serif;
 }
 
-#content ul, #content ol, #sidebar ul, #sidebar li {
+#sidebar ul, #sidebar li {
 	margin: 1em 0 1em 0;
 }
 
-#content ol li, #sidebar ol li {
+#sidebar ol li {
 	margin: 0 0 0.5em 30px;
-	list-style-type:decimal;
+	list-style-type: decimal;
 }
 
-#content ul li, #sidebar ul li {
+#sidebar ul li {
 	margin: 0 0 0.5em 30px;
 	list-style-type: disc;
 }
@@ -895,7 +897,7 @@ form span.exempel {
 	padding: 18px 15px 15px 13px;
 	font-size:2.5em;
 	font-family: Tahoma, Helvetica, Arial, sans-serif;
-	width: 17%;
+	width: 22%;
 	float:left;
 }
 
@@ -980,4 +982,52 @@ p.utredning a {
 }
 p.utredning a {
 	text-decoration:underline;
+}
+
+div.separator {
+    padding: 0 0 1em 0;
+    margin: 0 0 1em 0;
+    border-bottom: 1px solid #999999;
+}
+
+/* comments */
+div.net_nehmer_comments_comment .published
+{
+    font-weight: bold;
+}
+
+div.net_nehmer_comments_comment .content
+{
+    margin: 1em;
+}
+
+form#net_nehmer_comments label
+{
+    margin: 0 0 0.5em 0;
+}
+
+form#net_nehmer_comments label span.field_text
+{
+    display: block;
+}
+
+form#net_nehmer_comments div.form_toolbar
+{
+    margin: 1em 0 1em 0;
+}
+
+div.net_nehmer_comments_comment_toolbar ul.midcom_toolbar
+{
+    clear: both;
+}
+
+div.net_nehmer_comments_comment_toolbar ul.midcom_toolbar li
+{
+    list-style-type: none;
+    float: left;
+}
+
+p.audit
+{
+    clear: both;
 }

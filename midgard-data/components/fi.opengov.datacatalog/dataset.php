@@ -87,5 +87,38 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
         return $formats;
     }
 
+    /**
+     * Returns the number of datasets (free or non-free)
+     * @param type string: free | non-free
+     * @return integer the number of datasets
+     */
+    public function get_number_of_datasets($type = 'free')
+    {
+        $_retval = 0;
+        $_res = array();
+        if ($type != '')
+        {
+            $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
+            $_res = $qb->execute();
+            foreach ($_res as $dataset)
+            {
+                $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
+                $qb->add_constraint('id', '=', $dataset->license);
+                $qb->add_constraint('type', '=', 'license');
+                $_info = $qb->execute();
+                if (count($_info) == 1)
+                {
+                    if ($_info[0]->get_parameter('fi.opengov.datacatalog', 'license_type') == $type)
+                    {
+                        $_retval++;
+                    }
+                }
+            }
+            unset($_info);
+            unset($_res);
+            unset($qb);        
+        }
+        return $_retval;
+    }
 }
 ?>

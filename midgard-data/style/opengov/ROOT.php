@@ -4,7 +4,11 @@
         <meta http-equiv="content-type" content="text/html; charset=UTF-8">
         <title><?php echo $_MIDCOM->i18n->get_string('welcome', 'fi.opengov.datacatalog'); ?></title>
         <?php
-        $_MIDCOM->print_head_elements();
+            if (! $_MIDCOM->auth->user)
+            {
+                $_MIDCOM->enable_jquery();
+            }
+            $_MIDCOM->print_head_elements();
         ?> 
         <link rel="stylesheet" href="/style/css/reset-fonts-grids.css" type="text/css">
         <link href="/style/css/screen5.css" rel="stylesheet" type="text/css" media="screen">
@@ -24,7 +28,9 @@
                 </div>
                 <div class="yui-gc">
                     <div class="yui-u first">
-                        <(content)>
+                        <div id="content">
+                            <(content)>
+                        </div>
                     </div>
                     <div class="yui-u sidebar">
                         <(page-sidebar)>
