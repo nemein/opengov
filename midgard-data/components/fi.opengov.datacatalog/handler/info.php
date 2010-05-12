@@ -107,6 +107,8 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         {
             $_MIDCOM->generate_error(MIDCOM_ERRCRIT, "Failed to initialize a DM2 create controller.");
         }
+
+        $this->_controller = $this->_request_data['controller'];
     }
     
     /**

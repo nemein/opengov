@@ -11,7 +11,7 @@
             $_MIDCOM->print_head_elements();
         ?> 
         <link rel="stylesheet" href="/style/css/reset-fonts-grids.css" type="text/css">
-        <link href="/style/css/screen5.css" rel="stylesheet" type="text/css" media="screen">
+        <link href="/style/css/opengov.css" rel="stylesheet" type="text/css" media="screen">
         <link href="/style/css/print2.css" rel="stylesheet" type="text/css" media="print">
         <!--[if IE 7]><link href="/syle/css/ie7.css" rel="stylesheet" type="text/css"><![endif]-->
         <!--[if lte IE 7]><link href="/style/css/ie6-7.css" rel="stylesheet" type="text/css"><![endif]-->

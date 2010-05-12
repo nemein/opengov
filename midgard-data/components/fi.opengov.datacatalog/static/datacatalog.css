@@ -1,26 +1,33 @@
-div.dataset_list_info {
+div.dataset_list_info,
+div.dataset_suggestion_list_info {
     padding: 0 0 1em 0;
     margin: 0 0 1em 0;
     border-bottom: 1px solid #999999;
 }
 
-div.dataset_list div.header {
+div.dataset_list div.header,
+div.dataset_suggestion_list div.header {
     border-bottom: 1px solid red;
 }
 
-div.dataset_list div.header div {
+div.dataset_list div.header div,
+div.dataset_suggestion_list div.header div {
     font-weight: bold;
     background: #EFEFEF;
     height: 1.5em;
 }
 
-div.dataset_item a.title {
+div.dataset_item a.title,
+div.dataset_suggestion_item a.title {
     display: block;
     clear: both;
 }
 
 div.dataset_list div.header div,
-div.dataset_item div {
+div.dataset_item div,
+div.dataset_suggestion_list div.header div,
+div.dataset_suggestion_item div
+{
     display: inline-block;
     vertical-align: top;
     padding: 4px 5px;
@@ -31,9 +38,19 @@ div.dataset_item .description {
     width: 14em;
 }
 
+div.dataset_suggestion_list div.header .description,
+div.dataset_suggestion_item .description {
+    width: 18em;
+}
+
 div.dataset_list div.header .org,
 div.dataset_item .org {
     width: 10em;
+}
+
+div.dataset_suggestion_list div.header .org,
+div.dataset_suggestion_item .org {
+    width: 12em;
 }
 
 div.dataset_list div.header .formats,
@@ -46,7 +63,8 @@ div.dataset_item .open {
     width: 4em;
 }
 
-div.dataset_item_detail div {
+div.dataset_item_detail div,
+div.dataset_suggestion_item_detail div {
     margin: 0 0 1em 0;
 }
 
@@ -58,6 +76,51 @@ div.dataset_item_detail .license span.free {
     background-image: url('/midcom-static/fi.opengov.datacatalog/icn_thumbup.png');
 }
 
+div.dataset_suggestion_list div.header .url,
+div.dataset_suggestion_item .url {
+    width: 5.1em;
+    overflow: hidden;
+}
+
+div.tags ul {
+    margin: 0.5em 0 0 0;
+}
+
+div.tags li {
+    float: left;
+    padding: 5px;
+    margin: 0 0.5em 0 0;
+    -moz-border-radius-bottomleft: 3px;
+    -moz-border-radius-bottomright: 3px;
+    -moz-border-radius-topleft: 3px;
+    -moz-border-radius-topright: 3px;
+    background-color: #E1E1E1;
+}
+
+div.tags li:hover {
+    background-color: #FFFFAA;
+}
+
 .chooser_widget_headers {
     display: none;
 }
+
+div.suggestion_info {
+    margin: 0 0 1em 0;
+}
+
+form#fi_opengov_datacatalog label
+{
+    margin: 0 0 0.5em 0;
+}
+
+form#fi_opengov_datacatalog label span.field_text
+{
+    display: block;
+}
+
+form#fi_opengov_datacatalog div.form_toolbar
+{
+    margin: 1em 0 1em 0;
+}
+

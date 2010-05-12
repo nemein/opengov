@@ -6,6 +6,7 @@
     $organization = $data['organization'];
     $license = $data['license'];
     $formats = $data['formats'];
+    $tags = $data['tags'];
     $open = $data['l10n']->get('yes');
 ?>
 
@@ -48,4 +49,26 @@
     <label><?php echo $data['l10n']->get('additional_info'); ?></label>
     <a href="&(dataset.url);">&(dataset.url);</a>
   </div>
+<?php
+    if (   isset($tags)
+        && count($tags))
+    {
+?>
+  <div class="tags">
+    <label><?php echo $data['l10n']->get('tags'); ?></label>
+    <ul>
+<?php
+        foreach ($tags as $tag => $value)
+        {
+?>
+            <li><a href="/data/topic/&(tag);">&(tag);</a></li>
+<?php
+        }
+?>
+    </ul>
+  </div>
+<?php
+    }
+?>
+
 </div>

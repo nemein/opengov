@@ -5,7 +5,8 @@
     (
         'title' => array
         (
-            'title' => 'title',
+            'title' => 'suggestion_title',
+            'helptext' => 'yada',
             'storage' => 'title',
             'type'    => 'text',
             'widget'  => 'text',
@@ -13,23 +14,23 @@
         ),
         'organization' => array
         (
-            'title' => 'organization',
-            'storage' => null,
+            'title' => 'suggestion_organization',
+            'storage' => 'organization',
             'type' => 'text',
             'widget' => 'text',
             'required' => true,
         ),
         'description' => array
         (
-            'title' => 'description',
+            'title' => 'suggestion_description',
             'storage' => 'description',
             'type'    => 'text',
-            'widget' => 'tinymce',
+            'widget' => 'textarea',
             'required' => true,
         ),
         'url' => array
         (
-            'title' => 'url',
+            'title' => 'suggestion_url',
             'storage' => 'url',
             'type'    => 'text',
             'widget'  => 'text',
@@ -37,15 +38,14 @@
         ),
         'tags' => Array
         (
-            'title' => 'tags',
-            'storage' => null,
+            'title' => 'suggestion_tags',
             'type' => 'tags',
             'widget' => 'text',
             'hidden' => false,
         ),
         'name' => array
         (
-            'title' => 'name',
+            'title' => 'submitter_name',
             'storage' => 'name',
             'type'    => 'text',
             'widget'  => 'text',
@@ -53,11 +53,11 @@
         ),
         'email' => array
         (
-            'title' => 'email'
+            'title' => 'submitter_email',
             'storage' => 'email',
             'type'    => 'text',
             'widget'  => 'text',
             'required' => false,
         ),
     ),
-),
+)

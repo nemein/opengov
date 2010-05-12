@@ -2,7 +2,7 @@
     $free = fi_opengov_datacatalog_dataset_dba::get_number_of_datasets('free');
     $non_free = fi_opengov_datacatalog_dataset_dba::get_number_of_datasets('non-free');
     $all = $free + $non_free;
-    $percent = round($free / $all) * 100;
+    $percent = round($free / $all * 100);
 ?>
 
 <div id="sidebar">
@@ -13,17 +13,17 @@
         </div>
         <div class="statustext">
             Tämänhetkinen tilanne: &(all); dataseteistä vain 
-            <a href="http://opengov.fi/data/open/"> &(free); ovat avoimia</a>.
+            <a href="/data"> &(free); ovat avoimia</a>.
         </div>
         <div class="clear"></div>
     </div>
     <h2>Myös sinä voit auttaa!</h2>
     <p>
         Tiedätkö dataseteistä joita katalogissa ei ole? 
-        <a href="http://opengov.fi/data/suggest/">Ehdota datasettiä</a> ja koitamme lisätä sen niin pian kuin mahdollista 
+        <a href="/data/suggest/">Ehdota datasettiä</a> ja koitamme lisätä sen niin pian kuin mahdollista 
     </p>
     <p>
-        <a href="http://opengov.fi/data/suggest/">
+        <a href="/data/suggest/">
             <img src="/style/img/btn_suggest_fi.png" alt="Ehdota \datasettiä">
         </a>
     </p>

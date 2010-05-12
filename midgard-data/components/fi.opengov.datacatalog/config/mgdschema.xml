@@ -49,7 +49,7 @@
         </property>
     </type>    
 
-    <type name="fi_opengov_datacatalog_suggestion" table="fi_opengov_datacatalog_suggestion">
+    <type name="fi_opengov_datacatalog_dataset_suggestion" table="fi_opengov_datacatalog_dataset_suggestion">
         <property name="id" type="unsigned integer" primaryfield="id">
             <description>Local non-replication-safe database identifier</description>
         </property>

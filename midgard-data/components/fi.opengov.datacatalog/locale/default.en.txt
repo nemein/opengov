@@ -10,16 +10,12 @@ Yes
 No
 ---STRINGEND
 
+---STRING email
+E-mail address
+---STRINGEND
+
 ---STRING welcome
 Welcome - opengov
----STRINGEND
-
----STRING slogan_fin
-Slogan in Finnish
----STRINGEND
-
----STRING slogan_eng
-Slogan in English
 ---STRINGEND
 
 ---STRING search
@@ -58,7 +54,7 @@ Description
 Organization
 ---STRINGEND
 
----STRING format
+---STRING formats
 Format(s)
 ---STRINGEND
 
@@ -76,6 +72,10 @@ Open
 
 ---STRING dataset_list_info
 Below is the list of datasets we have in our system.
+---STRINGEND
+
+---STRING dataset_list_tags_info %s
+Below is the list of datasets that are tagged with: %s
 ---STRINGEND
 
 ---STRING view_datasets
@@ -101,3 +101,72 @@ News
 ---STRING discuss %s comment
 Discuss (%s comment(s))
 ---STRINGEND
+
+---STRING create_dataset_suggestion
+Suggest New Dataset
+---STRINGEND
+
+---STRING edit_dataset_suggestion
+Edit Suggestion
+---STRINGEND
+
+---STRING delete_dataset_suggestion
+Delete Suggestion
+---STRINGEND
+
+---STRING create_suggestion_info
+Help us building the catalog by suggesting a new data set. Thank you.
+---STRINGEND
+
+---STRING suggestion_title
+Data set name (e.g. the state budget database)
+---STRINGEND
+
+---STRING suggestion_organization
+Responsible organization
+---STRINGEND
+
+---STRING suggestion_description
+Description (data format, license terms, etc.)
+---STRINGEND
+
+---STRING suggestion_url
+Link to information page about the data set
+---STRINGEND
+
+---STRING suggestion_tags
+Tags (e.g. economics, statistics)
+---STRINGEND
+
+---STRING submitter_email
+Your e-mail address
+---STRINGEND
+
+---STRING submitter_name
+Your name
+---STRINGEND
+
+---STRING submitter_email
+Your e-mail address
+---STRINGEND
+
+---STRING suggestion_allow_anonymous
+Allow suggestion posting anonymously
+---STRINGEND
+
+---STRING use_captcha
+Use captcha in the dataset suggesting forms
+---STRINGEND
+
+---STRING dataset_suggestion_list
+Suggested Data Sets
+---STRINGEND
+
+---STRING dataset_suggestion_list_info
+Below is the list of suggested datasets we have in our system.
+---STRINGEND
+
+---STRING tags
+Tags separated by space (e.g. music art fun)
+---STRINGEND
+

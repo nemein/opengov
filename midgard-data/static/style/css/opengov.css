@@ -899,6 +899,7 @@ form span.exempel {
 	font-family: Tahoma, Helvetica, Arial, sans-serif;
 	width: 22%;
 	float:left;
+    text-align: center;
 }
 
 .percent {

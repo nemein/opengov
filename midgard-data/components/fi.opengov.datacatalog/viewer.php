@@ -15,7 +15,7 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
 {
     function __construct($topic, $config)
     {
-        error_reporting(E_ERROR);
+        //error_reporting(E_ERROR);
         parent::__construct($topic, $config);
     }
 
@@ -68,6 +68,13 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
         (
             'handler' => array('fi_opengov_datacatalog_handler_dataset', 'delete'),
             'fixed_args' => array('delete'),
+            'variable_args' => 1,
+        );
+        // Handle /topic
+        $this->_request_switch['topic'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
+            'fixed_args' => array('topic'),
             'variable_args' => 1,
         );
         // Handle /organization/view
@@ -216,6 +223,27 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
         (
             'handler' => array('fi_opengov_datacatalog_handler_suggestion', 'create'),
             'fixed_args' => array('suggest'),
+        );
+        // Handle /suggestion/view
+        $this->_request_switch['suggestion_view'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_suggestion', 'read'),
+            'fixed_args' => array('suggestion', 'view'),
+            'variable_args' => 1,
+        );
+        // Handle /suggestion/edit
+        $this->_request_switch['suggestion_edit'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_suggestion', 'update'),
+            'fixed_args' => array('suggestion', 'edit'),
+            'variable_args' => 1,
+        );
+        // Handle /suggestion/delete
+        $this->_request_switch['suggestion_delete'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_suggestion', 'delete'),
+            'fixed_args' => array('suggestion', 'delete'),
+            'variable_args' => 1,
         );
    }
 

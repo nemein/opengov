@@ -30,10 +30,9 @@
         'tags' => Array
         (
             'title' => 'tags',
-            'storage' => null,
             'type' => 'tags',
             'widget' => 'text',
-            'hidden' => true,
+            'hidden' => false,
         ),
         'organization' => array
         (

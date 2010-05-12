@@ -19,5 +19,29 @@
             'type' => 'text',
             'widget' => 'text',
         ),         
+        'allow_anonymous' => array
+        (
+            'title' => 'suggestion_allow_anonymous',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'allow_anonymous',
+            ),
+            'type' => 'boolean',
+            'widget' => 'checkbox',
+        ),         
+        'use_captcha' => array
+        (
+            'title' => 'use_captcha',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'use_captcha',
+            ),
+            'type' => 'boolean',
+            'widget' => 'checkbox',
+        ),         
     )
 ),

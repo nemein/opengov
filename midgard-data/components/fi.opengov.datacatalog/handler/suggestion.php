@@ -8,17 +8,17 @@
  */
 
 /**
- * Datacatalog dataset
+ * Dataset suggestion handler
  *
  * @package fi.open.datacatalog
  */
-class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_components_handler_crud
+class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_components_handler_crud
 {
     /* the action that is set when a form is submitted */
     var $_action = null;
 
     /* all datasets */
-    var $datasets = array();
+    var $suggestions = array();
     
     /**
      * Simple default constructor.
@@ -29,19 +29,11 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     }
 
     /**
-     * _on_initialize is called by midcom on creation of the handler
-     */
-    function _on_initialize()
-    {
-        /* @todo: what to do here */
-    }
-
-    /**
      * Loads some data
      */
     public function _load_object($handler_id, $args, &$data)
     {
-        $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
+        $qb = fi_opengov_datacatalog_dataset_suggestion_dba::new_query_builder();
         $qb->add_constraint('id', '=', $args[0]);
         $_res = $qb->execute();
         
@@ -64,8 +56,27 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _load_schemadb()
     {
-        $this->_request_data['schemadb_dataset'] = midcom_helper_datamanager2_schema::load_database($this->_config->get('schemadb_dataset'));
-        $this->_schemadb =& $this->_request_data['schemadb_dataset'];
+
+        $this->_request_data['schemadb_suggestion'] = midcom_helper_datamanager2_schema::load_database($this->_config->get('schemadb_suggestion'));
+
+        if (!  $_MIDCOM->auth->user
+            && $this->_config->get('use_captcha'))
+        {
+            $this->_request_data['schemadb_suggestion']['default']->append_field
+            (
+                'captcha',
+                array
+                (
+                    'title' => $this->_l10n_midcom->get('captcha field title'),
+                    'storage' => null,
+                    'type' => 'captcha',
+                    'widget' => 'captcha',
+                    'widget_config' => $this->_config->get('captcha_config'),
+                )
+            );
+        }
+
+        $this->_schemadb =& $this->_request_data['schemadb_suggestion'];
     }
 
     /**
@@ -77,6 +88,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     {
         $this->_request_data['controller'] =& midcom_helper_datamanager2_controller::create($type);
         $this->_request_data['controller']->schemadb =& $this->_schemadb;
+        $this->_request_data['controller']->schema = 'default';
         $this->_request_data['controller']->callback_object =& $this;
 
         if ($type == 'simple')
@@ -134,7 +146,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 (
                     array
                     (
-                        MIDCOM_TOOLBAR_URL => "/data/create/",
+                        MIDCOM_TOOLBAR_URL => "../create/",
                         MIDCOM_TOOLBAR_LABEL => $this->_l10n_midcom->get('create_dataset'),
                         MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
                     )
@@ -150,20 +162,22 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function &dm2_create_callback(&$controller)
     {
-        $this->_object = new fi_opengov_datacatalog_dataset_dba();
+        $this->_object = new fi_opengov_datacatalog_dataset_suggestion_dba();
 
-        $this->_object->organization = array_pop($_POST['fi_opengov_datacatalog_organization_chooser_widget_selections']);
-        $this->_object->license = array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
-
-        if (! $this->_object->create())
+        if ($_MIDCOM->auth->request_sudo('fi.opengov.datacatalog'))
         {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_print_r('We operated on this object:', $this->_object);
-            debug_pop();
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to create a new dataset, cannot continue. Last Midgard error was: '. midcom_application::get_error_string());
-            // This will exit.
+            if (! $this->_object->create())
+            {
+                debug_push_class(__CLASS__, __FUNCTION__);
+                debug_print_r('We operated on this object:', $this->_object);
+                debug_pop();
+                $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
+                    'Failed to create a new dataset suggestion, cannot continue. Last Midgard error was: '. midcom_application::get_error_string());
+                // This will exit.
+            }
         }
+
+        $_MIDCOM->auth->drop_sudo();
 
         return $this->_object;
     }
@@ -176,8 +190,31 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _handler_create($handler_id, $args, &$data)
     {
-        $this->_mode = 'create';
-        return parent::_handler_create($handler_id, $args, &$data);
+        if (   $_MIDCOM->auth->user
+            || $this->_config->get('allow_anonymous'))
+        {
+            $this->_load_schemadb();
+            $this->_load_controller('create');
+
+            if ($this->_request_data['controller'])
+            {
+                switch ($this->_request_data['controller']->process_form())
+                {
+                    case 'save':
+                        /* Fall-through */
+                    case 'cancel':
+                        if (! $_MIDCOM->auth->user)
+                        {
+                            $_MIDCOM->auth->drop_sudo();
+                        }
+                }                        
+            }
+            return true;
+        }
+        else
+        {
+            return false;
+        }            
     }
 
     /**
@@ -190,26 +227,27 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _handler_read($handler_id, $args, &$data)
     {
+        $this->_request_data['topic']->require_do('midgard:admin');
+
         $_MIDCOM->enable_jquery();
 
-        if ($handler_id == 'topic')
-        {
-            $this->datasets = fi_opengov_datacatalog_dataset_dba::get_dataset_by_tags($args[0]);
-            $this->_request_data['tags'] = $args[0];
-        }
-        else
-        {
-            $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
-            switch($handler_id)
-            {
-                case 'view':
-                    $qb->add_constraint('id', '=', $args[0]);
-                    break;
-            }
+        $qb = fi_opengov_datacatalog_dataset_suggestion_dba::new_query_builder();
 
-            $this->datasets = $qb->execute();
+        switch($handler_id)
+        {
+            case 'suggestion_view':
+                if (isset($args[0]))
+                {
+                    if ($args[0] != 'all')
+                    {
+                        $qb->add_constraint('id', '=', $args[0]);
+                    }
+                }
+                break;
         }
-        
+
+        $this->suggestions = $qb->execute();
+
         $this->_update_breadcrumb($handler_id);
         $this->_populate_toolbar($handler_id);
 
@@ -225,8 +263,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _handler_update($handler_id, $args, &$data)
     {    
-        $this->_mode = 'update';
         $this->_request_data['topic']->require_do('midgard:update');
+        $this->_mode = 'update';
 
         $this->_load_object($handler_id, $args, $data);
         $this->_load_schemadb();
@@ -235,16 +273,9 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         if ($this->_request_data['controller'])
         {
             $this->_action = $this->_request_data['controller']->process_form();
-            if ($this->_action == 'save')
-            {
-                /* @todo: wonder why do we have to do this */
-                $this->_object->license = array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
-                $this->_object->update();
-            }        
         }
 
         $this->_request_data['object'] =& $this->_object;
-        $this->_controller = $this->_request_data['controller'];
 
         return true;
     }
@@ -268,7 +299,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_create($handler_id, &$data)
     {
-        midcom_show_style('dataset_create');
+        midcom_show_style('dataset_suggestion_create');
     }          
 
    /**
@@ -279,49 +310,36 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_read($handler_id, &$data)
     {
-        if (isset($this->datasets))
+        if (isset($this->suggestions))
         {
-            $this->_request_data['handler_id'] = $handler_id;
-
             if ($handler_id != 'view')
             {
-                midcom_show_style('dataset_list_header');
+                midcom_show_style('dataset_suggestion_list_header');
             }
             $i = 0;
-            foreach ($this->datasets as $dataset) 
+            foreach ($this->suggestions as $suggestion) 
             {
-                $this->_request_data['dataset'] = $dataset;
-
-                /* fetch organization info */
-                $this->_request_data['organization'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->organization, 'organization');
-                
-                /* fetch license info */
-                $this->_request_data['license'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'license');
-                
-                /* fetch formats info */
-                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
+                $this->_request_data['suggestion'] = $suggestion;
 
                 /* show different page when viewing only 1 dataset */
                 if ($handler_id == 'view')
                 {
-                    /* fetch and populate tags */
-                    $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
-                    midcom_show_style('dataset_item_detailed_view');
+                    midcom_show_style('dataset_suggestion_item_detailed_view');
                 }
                 else
                 {
                     (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
-                    midcom_show_style('dataset_item_view');
+                    midcom_show_style('dataset_suggestion_item_view');
                 }
             }
             if ($handler_id != 'view')
             {
-                midcom_show_style('dataset_list_footer');
+                midcom_show_style('dataset_suggestion_list_footer');
             }
         }
         else 
         {
-            midcom_show_style('no_datasets');
+            midcom_show_style('no_dataset_suggestion');
         }
     }
 
@@ -337,10 +355,10 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         {
             case 'save':
             case 'cancel':
-                $_MIDCOM->relocate('view/' . $this->_object->id);
+                $_MIDCOM->relocate('suggestion/view/' . $this->_object->id);
                 break;
             default:
-                midcom_show_style('dataset_edit');
+                midcom_show_style('dataset_suggestion_edit');
         }
     }            
 
@@ -352,6 +370,6 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_delete($handler_id, &$data)
     {
-        midcom_show_style('dataset_delete');
+        midcom_show_style('dataset_suggestion_delete');
     }
 }

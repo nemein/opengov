@@ -6,7 +6,7 @@
     $organization = $data['organization'];
     $license = $data['license'];
     $formats = $data['formats'];
-    $open = $data['l10n']->get('yes');
+    ($license['type'] == 'free') ? $open = $data['l10n']->get('yes') : $open = $data['l10n']->get('no');
     $class = $data['class'];
 ?>
 

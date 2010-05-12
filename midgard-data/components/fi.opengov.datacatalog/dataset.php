@@ -118,7 +118,20 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
             unset($_res);
             unset($qb);        
         }
+
         return $_retval;
+    }
+
+    /**
+     * Returns an array of datasets tagged with 'tags'
+     * @param tags string
+     * @return array all matching dataset objects
+     */
+    public function get_dataset_by_tags($tags)
+    {
+        $_tags = explode(' ', $tags);
+        $_classes[] = 'fi_opengov_datacatalog_dataset_dba';
+        return net_nemein_tag_handler::get_objects_with_tags($_tags, $_classes);
     }
 }
 ?>
