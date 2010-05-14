@@ -20,3 +20,11 @@
 
 /* The captcha widget config to use */
 'captcha_config' => Array(),
+
+/* The guid of the topic which holds dataset comments */
+'dataset_comments_topic_guid' => '',
+
+/* The id of the topic which holds blog posts */
+'blog_topic_id' => '',
+
+

@@ -18,7 +18,7 @@
             ),
             'type' => 'text',
             'widget' => 'text',
-        ),         
+        ), 
         'allow_anonymous' => array
         (
             'title' => 'suggestion_allow_anonymous',
@@ -30,7 +30,31 @@
             ),
             'type' => 'boolean',
             'widget' => 'checkbox',
-        ),         
+        ),
+        'dataset_comments_topic_guid' => array
+        (
+            'title' => 'dataset_comments_topic_guid',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'dataset_comments_topic_guid',
+            ),
+            'type' => 'text',
+            'widget' => 'text',
+        ),
+        'blog_topic_id' => array
+        (
+            'title' => 'blog_topic_id',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'blog_topic_id',
+            ),
+            'type' => 'number',
+            'widget' => 'text',
+        ),
         'use_captcha' => array
         (
             'title' => 'use_captcha',
@@ -42,6 +66,6 @@
             ),
             'type' => 'boolean',
             'widget' => 'checkbox',
-        ),         
+        ),
     )
 ),

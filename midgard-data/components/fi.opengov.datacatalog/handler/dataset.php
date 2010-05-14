@@ -1,4 +1,3 @@
-
 <?php
 /**
  * @package fi.opengov.datacatalog

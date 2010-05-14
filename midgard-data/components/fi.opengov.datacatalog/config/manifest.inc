@@ -29,8 +29,9 @@
     'dependencies' => array
     (
         'midcom.helper.datamanager2' => array(),
+        'net.nehmer.blog' => array(),
+        'net.nehmer.comments' => array(),
         'net.nemein.tag' => array(),
         'midcom' => array(),
     ),
 ),
-
