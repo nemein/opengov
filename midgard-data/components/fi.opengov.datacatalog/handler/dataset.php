@@ -18,7 +18,13 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     var $_action = null;
 
     /* all datasets */
-    var $datasets = array();
+    var $_datasets = array();
+
+    /* a flag indicating whether a list or a detailed view is shown */
+    var $_show_list = true;
+
+    /* the filter (open, close) */
+    var $_filter = '';
     
     /**
      * Simple default constructor.
@@ -29,32 +35,60 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     }
 
     /**
-     * _on_initialize is called by midcom on creation of the handler
-     */
-    function _on_initialize()
-    {
-        /* @todo: what to do here */
-    }
-
-    /**
      * Loads some data
      */
     public function _load_object($handler_id, $args, &$data)
     {
         $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
-        $qb->add_constraint('id', '=', $args[0]);
-        $_res = $qb->execute();
-        
-        if (count($_res))
+        switch($handler_id)
         {
-            $this->_object = $_res[0];
+            case 'view':
+            case 'edit':
+            case 'delete':
+                if (   isset($args[0])
+                    && is_numeric($args[0]))
+                {
+                    $this->_show_list = false;
+                    $qb->add_constraint('id', '=', $args[0]);
+                }
+                break;
+        }
+
+        $this->_datasets = $qb->execute();
+
+        switch($handler_id)
+        {
+            case 'open':
+                $this->_filter_datasets('open');
+                break;
+            case 'closed':
+                $this->_filter_datasets('closed');
+                break;
+        }
+
+        if (count($this->_datasets))
+        {
+            if (   isset($args[0])
+                && is_numeric($args[0])
+                && ($handler_id == 'view'
+                || $handler_id == 'edit'
+                || $handler_id == 'delete'))
+            {
+                /* set _object if we want to work on a particular dataset */
+                $this->_object = $this->_datasets[0];
+            }
         }
         else
         {
             debug_push_class(__CLASS__, __FUNCTION__);
             debug_pop();
+            $arg = '';
+            if (isset($args[0]))
+            {
+                $arg = $args[0];
+            }
             $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to read dataset object (handler: ' . $handler_id . '/' . $args[0] . ')');
+                'Failed to read dataset object (handler: ' . $handler_id . '/' . $arg . ')');
             //this will result in HTTP error 404
         }
     }
@@ -75,21 +109,21 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _load_controller($type)
     {
-        $this->_request_data['controller'] =& midcom_helper_datamanager2_controller::create($type);
-        $this->_request_data['controller']->schemadb =& $this->_schemadb;
-        $this->_request_data['controller']->callback_object =& $this;
+        $this->_controller =& midcom_helper_datamanager2_controller::create($type);
+        $this->_controller->schemadb =& $this->_schemadb;
+        $this->_controller->callback_object =& $this;
+        $this->_controller->schemaname = 'default';
+        $this->_datamanager =& $this->_controller->datamanager;
 
         if ($type == 'simple')
         {
-            $this->_request_data['controller']->set_storage($this->_object, 'default');
+            $this->_controller->set_storage($this->_object, 'default');
         }
 
-        if (! $this->_request_data['controller']->initialize())
+        if (! $this->_controller->initialize())
         {
             $_MIDCOM->generate_error(MIDCOM_ERRCRIT, "Failed to initialize a DM2 create controller.");
         }
-
-        $this->_controller = $this->_request_data['controller'];
     }
 
     /**
@@ -122,24 +156,47 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _populate_toolbar($handler_id)
     {
-        if (! $this->_object)
+        if (isset($this->_object))
         {
-            return;
-        }
-        else
-        {
-            if ($this->_object->can_do('midgard:create'))
+            if (   $this->_object->can_do('midgard:update')
+                && $handler_id != 'edit')
             {
                 $this->_view_toolbar->add_item
                 (
                     array
                     (
-                        MIDCOM_TOOLBAR_URL => "/data/create/",
-                        MIDCOM_TOOLBAR_LABEL => $this->_l10n_midcom->get('create_dataset'),
-                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
+                        MIDCOM_TOOLBAR_URL => "edit/" . $this->_object->id,
+                        MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('edit_dataset'),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
                     )
                 );
             }
+            if (   $this->_object->can_do('midgard:delete')
+                && $handler_id != 'delete')
+            {
+                $this->_view_toolbar->add_item
+                (
+                    array
+                    (
+                        MIDCOM_TOOLBAR_URL => "delete/" . $this->_object->id,
+                        MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('delete_dataset'),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
+                    )
+                );
+            }
+        }
+        if (   $handler_id != 'create'
+            && $this->_topic->can_do('midgard:create'))
+        {
+            $this->_node_toolbar->add_item
+            (
+                array
+                (
+                    MIDCOM_TOOLBAR_URL => "create/",
+                    MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('create_dataset'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
+                )
+            );
         }
     }
 
@@ -168,6 +225,49 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         return $this->_object;
     }
 
+
+    /**
+     * Filters the dataset based on criteria
+     * @param strin criteria (currently: open, closed)
+     */
+    private function _filter_datasets($criteria)
+    {
+        $_type = '';
+        $_filtered = array();
+
+        switch ($criteria)
+        {
+            case 'open':
+                $_type = 'free';
+                break;
+            case 'closed':
+                $_type = 'non-free';
+                break;
+        }
+        
+        if ($_type != '')
+        {
+            $this->_filter = $criteria;
+            
+            if (count($this->_datasets))
+            {
+                $i = 0;
+                foreach ($this->_datasets as $dataset)
+                {
+                    if (fi_opengov_datacatalog_dataset_dba::matching_license_type($dataset->id, $_type))
+                    {
+                        $_filtered[] = $dataset;
+                    }
+                    ++$i;
+                }
+            }
+        }
+        $this->_datasets = $_filtered;
+
+        unset($_type);
+        unset($_filtered);
+    }
+
     /**
      * @param mixed $handler_id The ID of the handler.
      * @param Array $args The argument list.
@@ -194,20 +294,12 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
 
         if ($handler_id == 'topic')
         {
-            $this->datasets = fi_opengov_datacatalog_dataset_dba::get_dataset_by_tags($args[0]);
+            $this->_datasets = fi_opengov_datacatalog_dataset_dba::get_dataset_by_tags($args[0]);
             $this->_request_data['tags'] = $args[0];
         }
         else
         {
-            $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
-            switch($handler_id)
-            {
-                case 'view':
-                    $qb->add_constraint('id', '=', $args[0]);
-                    break;
-            }
-
-            $this->datasets = $qb->execute();
+            $this->_load_object($handler_id, $args, &$data);
         }
         
         $this->_update_breadcrumb($handler_id);
@@ -215,7 +307,6 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
 
         return true;
     }
-
 
     /**
      * @param mixed $handler_id The ID of the handler.
@@ -232,19 +323,20 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         $this->_load_schemadb();
         $this->_load_controller('simple');
 
-        if ($this->_request_data['controller'])
+        if ($this->_controller)
         {
-            $this->_action = $this->_request_data['controller']->process_form();
-            if ($this->_action == 'save')
+            $this->_action = $this->_controller->process_form();
+            if (   $this->_action == 'save'
+                || $this->_action == 'cancel')
             {
-                /* @todo: wonder why do we have to do this */
-                $this->_object->license = array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
+                $this->_object->license = (int)array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
                 $this->_object->update();
+                $_MIDCOM->relocate('view/' . $this->_object->id);
             }        
         }
 
         $this->_request_data['object'] =& $this->_object;
-        $this->_controller = $this->_request_data['controller'];
+        $this->_request_data['controller'] = $this->_controller;
 
         return true;
     }
@@ -260,6 +352,18 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         return parent::_handler_delete($handler_id, $args, &$data);
     }
     
+    /**
+     * @param mixed $handler_id The ID of the handler.
+     * @param Array $args The argument list.
+     * @param Array &$data The local request data.
+     * @return boolean Indicating success.
+     */
+    function _handler_tagcloud($handler_id, $args, &$data)
+    {
+        $_MIDCOM->skip_page_style = true;
+        return true;
+    }
+
    /**
      * Displays the datasets create form
      *
@@ -279,30 +383,32 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_read($handler_id, &$data)
     {
-        if (isset($this->datasets))
+        if (isset($this->_datasets))
         {
             $this->_request_data['handler_id'] = $handler_id;
 
-            if ($handler_id != 'view')
+            if ($this->_show_list)
             {
+                $this->_request_data['filter'] = $this->_filter;
                 midcom_show_style('dataset_list_header');
             }
             $i = 0;
-            foreach ($this->datasets as $dataset) 
+
+            foreach ($this->_datasets as $dataset) 
             {
                 $this->_request_data['dataset'] = $dataset;
 
                 /* fetch organization info */
-                $this->_request_data['organization'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->organization, 'organization');
+                $this->_request_data['organization'] = fi_opengov_datacatalog_info_dba::get_details($dataset->organization, 'organization');
                 
                 /* fetch license info */
-                $this->_request_data['license'] = fi_opengov_datacatalog_dataset_dba::get_details($dataset->license, 'license');
+                $this->_request_data['license'] = fi_opengov_datacatalog_info_dba::get_details($dataset->license, 'license');
                 
                 /* fetch formats info */
                 $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
 
                 /* show different page when viewing only 1 dataset */
-                if ($handler_id == 'view')
+                if ($handler_id == 'view' && ! $this->_show_list)
                 {
                     /* fetch and populate tags */
                     $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
@@ -314,7 +420,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                     midcom_show_style('dataset_item_view');
                 }
             }
-            if ($handler_id != 'view')
+            
+            if ($this->_show_list)
             {
                 midcom_show_style('dataset_list_footer');
             }
@@ -333,15 +440,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_update($handler_id, &$data)
     {
-        switch ($this->_action)
-        {
-            case 'save':
-            case 'cancel':
-                $_MIDCOM->relocate('view/' . $this->_object->id);
-                break;
-            default:
-                midcom_show_style('dataset_edit');
-        }
+        midcom_show_style('dataset_edit');
     }            
 
    /**
@@ -353,5 +452,32 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     public function _show_delete($handler_id, &$data)
     {
         midcom_show_style('dataset_delete');
+    }
+
+   /**
+     * Displays the dataset tag cloud
+     *
+     * @param mixed $handler_id The ID of the handler.
+     * @param mixed &$data The local request data.
+     */
+    public function _show_tagcloud($handler_id, &$data)
+    {
+        $_tags = fi_opengov_datacatalog_dataset_dba::get_all_tags();
+        if (count($_tags))
+        {
+            midcom_show_style('dataset_tagcloud_header');
+            foreach($_tags as $tag => $value)
+            {
+                $this->_request_data['tag'] = $tag;
+                $this->_request_data['url'] = $_MIDCOM->get_context_data(MIDCOM_CONTEXT_ANCHORPREFIX). 'topic/' . $tag;
+                midcom_show_style('dataset_tagcloud_item');
+            }
+            midcom_show_style('dataset_tagcloud_footer');
+        }
+        else
+        {
+            midcom_show_style('no_tags');
+        }        
+        unset($_tags);
     }
 }

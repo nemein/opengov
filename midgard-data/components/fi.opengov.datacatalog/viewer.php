@@ -70,6 +70,18 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('delete'),
             'variable_args' => 1,
         );
+        // Handle /open
+        $this->_request_switch['open'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
+            'fixed_args' => array('open'),
+        );
+        // Handle /open
+        $this->_request_switch['closed'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'read'),
+            'fixed_args' => array('closed'),
+        );        
         // Handle /topic
         $this->_request_switch['topic'] = array
         (
@@ -77,7 +89,13 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             'fixed_args' => array('topic'),
             'variable_args' => 1,
         );
-        // Handle /organization/view
+        // Handle /tagcloud
+        $this->_request_switch['tagcloud'] = array
+        (
+            'handler' => array('fi_opengov_datacatalog_handler_dataset', 'tagcloud'),
+            'fixed_args' => array('tagcloud'),
+        );
+         // Handle /organization/view
         $this->_request_switch['organization_view'] = array
         (
             'handler' => array('fi_opengov_datacatalog_handler_info', 'read'),
@@ -305,18 +323,6 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
                     MIDCOM_TOOLBAR_LABEL => $this->_l10n_midcom->get('component configuration'),
                     MIDCOM_TOOLBAR_HELPTEXT => $this->_l10n_midcom->get('component configuration helptext'),
                     MIDCOM_TOOLBAR_ICON => 'stock-icons/16x16/stock_folder-properties.png',
-                )
-            );
-        }
-        if ($this->_topic->can_do('midgard:create'))
-        {
-            $this->_node_toolbar->add_item
-            (
-                array
-                (
-                    MIDCOM_TOOLBAR_URL => "create/",
-                    MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('create_dataset'),
-                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
                 )
             );
         }

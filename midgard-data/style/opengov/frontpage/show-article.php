@@ -13,7 +13,7 @@
     global $bloginfo;
 
     /* the index-item style will set $number_of_comments */
-    $_MIDCOM->dynamic_load('midcom-substyle-blog/blog/latest/1', array('cache_module_content_caching_strategy' => 'public'));
+    $_MIDCOM->dynamic_load('midcom-substyle-dl_frontpage/blog/latest/1', array('cache_module_content_caching_strategy' => 'public'));
 
     $url = $bloginfo['url'];
     $comments = $bloginfo['comments'];

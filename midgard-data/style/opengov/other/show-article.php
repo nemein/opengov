@@ -6,3 +6,4 @@
 <h1>&(view['title']:h);</h1>
 
 &(view['content']:h);
+

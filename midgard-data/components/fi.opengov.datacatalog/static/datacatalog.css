@@ -82,11 +82,17 @@ div.dataset_suggestion_item .url {
     overflow: hidden;
 }
 
-div.tags ul {
-    margin: 0.5em 0 0 0;
+div.tags {
+    display: inline-block;
 }
 
-div.tags li {
+div.tags ul {
+    margin: 0.5em 0 0 0;
+    list-style-type: none;
+}
+
+div.tags ul li {
+    list-style-type: none;
     float: left;
     padding: 5px;
     margin: 0 0.5em 0 0;
@@ -97,7 +103,7 @@ div.tags li {
     background-color: #E1E1E1;
 }
 
-div.tags li:hover {
+div.tags ul li:hover {
     background-color: #FFFFAA;
 }
 

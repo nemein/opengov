@@ -5,4 +5,8 @@
 
 <h1>&(view['title']:h);</h1>
 
-&(view['content']:h);
+<div class="yui-u first">
+    <div id="content">
+    &(view['content']:h);
+    </div>
+</div>

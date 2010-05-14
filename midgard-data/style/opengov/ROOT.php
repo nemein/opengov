@@ -33,10 +33,23 @@
                         </div>
                     </div>
                     <div class="yui-u sidebar">
-                        <(page-sidebar)>
+                        <?php
+                            switch ($_MIDCOM->get_context_data(MIDCOM_CONTEXT_ANCHORPREFIX))
+                            {
+                                case '/':
+                                case '/blog/':
+                        ?>
+                                    <(blogpage-sidebar)>
+                        <?php
+                                    break;
+                                case '/data/':
+                        ?>
+                                    <(datapage-sidebar)>
+                        <?php
+                                    break;
+                            }
+                        ?>
                     </div>
-                </div>
-                <div class="yui-g robots-nocontent">                    
                 </div>
             </div>
             <div id="ft" class="robots-nocontent footer" role="contentinfo">

@@ -16,46 +16,6 @@
 class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_dataset_dba
 {
     /*
-     * Finds and returns organization and license details
-     * @param integer the info's ID 
-     * @param string type ca nbe organization, license, format
-     * @return array storing the title and URL of the organization or the license
-     */
-    public function get_details($id = null, $type = '')
-    {
-        $details = array();
-        if (   $id
-            && $type != '')
-        {
-            $organization = array();
-            $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
-            $qb->add_constraint('id', '=', $id);
-            $qb->add_constraint('type', '=', $type);
-            $_res = $qb->execute();
-
-            /* make sure we return only 1 organization and license */
-            $details['title'] = $_res[0]->title;
-            $details['url'] = $_res[0]->url;
-
-            switch($type)
-            {
-                case 'organization':
-                    $details['information'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_information');
-                    $details['address'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_address');
-                    $details['contact'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'org_contact');
-                    break;
-                case 'license':
-                    $details['type'] = $_res[0]->get_parameter('fi.opengov.datacatalog', 'license_type');
-                    break;
-            }
-
-            unset($_res);
-            unset($qb);
-        }        
-        return $details;
-    }
-
-    /*
      * Finds and returns formats of a dataset
      * @param integer ID of the dataset
      * @return array storing the title and URL of the format's
@@ -123,6 +83,41 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
     }
 
     /**
+     * Checks the license type of the dataset
+     * @param integer id of the dataset
+     * @param string type; can be free or non-free
+     * @return boolean true, if the dataset license type macthes the given criteria
+     */
+    public function matching_license_type($dataset_id, $type)
+    {
+        $retval = false;
+
+        $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
+        $qb->add_constraint('id', '=', $dataset_id);
+        $res = $qb->execute();
+
+        if (count($res) == 1)
+        {            
+            $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
+            $qb->add_constraint('id', '=', $res[0]->license);
+            $qb->add_constraint('type', '=', 'license');
+            $res = $qb->execute();
+            if (count($res) == 1)
+            {
+                if ($res[0]->get_parameter('fi.opengov.datacatalog', 'license_type') == $type)
+                {
+                    $retval = true;
+                }
+            }
+        }
+
+        unset($qb);
+        unset($res);
+
+        return $retval;
+    }
+
+    /**
      * Returns an array of datasets tagged with 'tags'
      * @param tags string
      * @return array all matching dataset objects
@@ -131,7 +126,16 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
     {
         $_tags = explode(' ', $tags);
         $_classes[] = 'fi_opengov_datacatalog_dataset_dba';
-        return net_nemein_tag_handler::get_objects_with_tags($_tags, $_classes);
+        return net_nemein_tag_handler::get_objects_with_tags($_tags, $_classes);   
+    }
+
+    /**
+     * Returns an array of datasets tagged with 'tags'
+     * @return array all tags
+     */
+    public function get_all_tags()
+    {
+        return net_nemein_tag_handler::get_tags_by_class('fi_opengov_datacatalog_dataset_dba');
     }
 }
 ?>

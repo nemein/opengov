@@ -22,10 +22,6 @@ Welcome - opengov
 Search
 ---STRINGEND
 
----STRING search
-Search
----STRINGEND
-
 ---STRING url
 URL
 ---STRINGEND
@@ -78,16 +74,24 @@ Below is the list of datasets we have in our system.
 Below is the list of datasets that are tagged with: %s
 ---STRINGEND
 
+---STRING dataset_filtered_list %s
+Below is a list of all %s datasets
+---STRINGEND
+
 ---STRING view_datasets
-View Datasets
+View datasets
 ---STRINGEND
 
 ---STRING create_dataset
-Create Dataset
+Create dataset
 ---STRINGEND
 
 ---STRING edit_dataset
-Edit Dataset
+Edit dataset
+---STRINGEND
+
+---STRING delete_dataset
+Delete dataset
 ---STRINGEND
 
 ---STRING news
@@ -103,23 +107,23 @@ Discuss (%s comment(s))
 ---STRINGEND
 
 ---STRING create_dataset_suggestion
-Suggest New Dataset
+Suggest new dataset
 ---STRINGEND
 
 ---STRING edit_dataset_suggestion
-Edit Suggestion
+Edit suggestion
 ---STRINGEND
 
 ---STRING delete_dataset_suggestion
-Delete Suggestion
+Delete suggestion
 ---STRINGEND
 
 ---STRING create_suggestion_info
-Help us building the catalog by suggesting a new data set. Thank you.
+Help us building the catalog by suggesting a new dataset. Thank you.
 ---STRINGEND
 
 ---STRING suggestion_title
-Data set name (e.g. the state budget database)
+dataset name (e.g. the state budget database)
 ---STRINGEND
 
 ---STRING suggestion_organization
@@ -131,11 +135,11 @@ Description (data format, license terms, etc.)
 ---STRINGEND
 
 ---STRING suggestion_url
-Link to information page about the data set
+Link to information page about the dataset
 ---STRINGEND
 
 ---STRING suggestion_tags
-Tags (e.g. economics, statistics)
+Tags separated by space (e.g. economics statistics)
 ---STRINGEND
 
 ---STRING submitter_email
@@ -159,7 +163,7 @@ Use captcha in the dataset suggesting forms
 ---STRINGEND
 
 ---STRING dataset_suggestion_list
-Suggested Data Sets
+Suggested datasets
 ---STRINGEND
 
 ---STRING dataset_suggestion_list_info
@@ -170,3 +174,6 @@ Below is the list of suggested datasets we have in our system.
 Tags separated by space (e.g. music art fun)
 ---STRINGEND
 
+---STRING browse_by_tags
+Browse datasets by topic
+---STRINGEND

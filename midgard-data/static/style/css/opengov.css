@@ -151,7 +151,7 @@ caption {
 	float:right;
 	font-family: Arial, Helvetica, sans-serif;
 }
-.blog {
+ul.fi_protie_navigation .blog {
 	background-color: #036;
 }
 .guidelines {
@@ -167,10 +167,11 @@ caption {
 	background-color: #fc0;
 	color: #000;
 }
-.data {
+ul.fi_protie_navigation .data {
 	background-color: #0a0;
 }
-.page {
+
+ul.fi_protie_navigation .page {
 	background-color: #f30;
 }
 .topmenu ul li.page a {
@@ -272,7 +273,6 @@ img.center {
 
 #sidebar ul li {
 	margin: 0 0 0.5em 30px;
-	list-style-type: disc;
 }
 
 #content blockquote {
@@ -1036,4 +1036,8 @@ p.audit
 div#content .first
 {
     width: 100%;
+}
+
+div.discuss {
+    clear: both;
 }
