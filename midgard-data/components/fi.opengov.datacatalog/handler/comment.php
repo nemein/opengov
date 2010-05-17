@@ -126,6 +126,7 @@ class fi_opengov_datacatalog_handler_comment extends net_nehmer_comments_handler
      */
     public function _show_read($handler_id, &$data)
     {
+        /* union of the two arrays */
         $_comments = $this->_get_last_dataset_comments() +  $this->_get_last_blog_comments();
 
         if (count($_comments))
