@@ -36,7 +36,7 @@
         <h2>Uusimmat kommentit</h2>
         <?php
             /* load the last 10 comments submitted to blogs */
-            $_MIDCOM->dynamic_load('midcom-substyle-dl_comments/comments/10', array('cache_module_content_caching_strategy' => 'public'));
+            $_MIDCOM->dynamic_load('midcom-substyle-dl_comments/data/comments/all', array('cache_module_content_caching_strategy' => 'public'));
         ?>
     </div>
 </div>

@@ -7,18 +7,18 @@
     'description' => 'Default Configuration Schema', /* This is a topic */
     'fields'      => Array
     ( 
-        'slogan' => array
+        'allow_comments' => array
         (
-            'title' => 'slogan',
+            'title' => 'allow_comments',
             'storage' => array
             (
                 'location' => 'configuration',
                 'domain' => 'fi.opengov.datacatalog',
-                'name' => 'slogan',
+                'name' => 'allow_comments',
             ),
-            'type' => 'text',
-            'widget' => 'text',
-        ), 
+            'type' => 'boolean',
+            'widget' => 'checkbox',
+        ),
         'allow_anonymous' => array
         (
             'title' => 'suggestion_allow_anonymous',
@@ -31,16 +31,16 @@
             'type' => 'boolean',
             'widget' => 'checkbox',
         ),
-        'dataset_comments_topic_guid' => array
+        'dataset_topic_id' => array
         (
-            'title' => 'dataset_comments_topic_guid',
+            'title' => 'dataset_topic_id',
             'storage' => array
             (
                 'location' => 'configuration',
                 'domain' => 'fi.opengov.datacatalog',
-                'name' => 'dataset_comments_topic_guid',
+                'name' => 'dataset_topic_id',
             ),
-            'type' => 'text',
+            'type' => 'number',
             'widget' => 'text',
         ),
         'blog_topic_id' => array
@@ -55,6 +55,31 @@
             'type' => 'number',
             'widget' => 'text',
         ),
+        'comments_topic_id' => array
+        (
+            'title' => 'comments_topic_id',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'comments_topic_id',
+            ),
+            'type' => 'text',
+            'widget' => 'text',
+        ),
+        'number_of_comments_on_frontpage' => array
+        (
+            'title' => 'number_of_comments_on_frontpage',
+            'storage' => array
+            (
+                'location' => 'configuration',
+                'domain' => 'fi.opengov.datacatalog',
+                'name' => 'number_of_comments_on_frontpage',
+            ),
+            'type' => 'number',
+            'widget' => 'text',
+            'default' => 10,
+        ), 
         'use_captcha' => array
         (
             'title' => 'use_captcha',

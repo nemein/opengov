@@ -411,6 +411,15 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 {
                     /* fetch and populate tags */
                     $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
+                    /* load the comments if enabled */
+                    if ($this->_config->get('allow_comments'))
+                    {
+                        $comments_node = $this->_seek_comments();
+                        if ($comments_node)
+                        {
+                            $this->_request_data['comments_url'] = $comments_node[MIDCOM_NAV_RELATIVEURL] . "comment/{$dataset->guid}";
+                        }
+                    }
                     midcom_show_style('dataset_item_detailed_view');
                 }
                 else
@@ -478,5 +487,27 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             midcom_show_style('no_tags');
         }        
         unset($_tags);
+    }
+
+    /**
+     * Try to find the comments node (cache results)
+     * @return object node which has the dataset comments
+     * @access private
+     */
+    function _seek_comments()
+    {
+        $comments_node = false;
+        if ($this->_config->get('comments_topic_id'))
+        {
+            $nap = new midcom_helper_nav();
+            $comments_node = $nap->get_node($this->_config->get('comments_topic_id'));
+        }
+        else
+        {
+            // No comments topic specified, autoprobe
+            $comments_node = midcom_helper_find_node_by_component('net.nehmer.comments');
+        }
+
+        return $comments_node;
     }
 }

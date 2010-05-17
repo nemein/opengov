@@ -357,37 +357,5 @@ class fi_opengov_datacatalog_viewer extends midcom_baseclasses_components_reques
             $_MIDCOM->add_link_head(array('rel' => 'stylesheet',  'type' => 'text/css', 'href' => MIDCOM_STATIC_URL . '/fi.opengov.datacatalog/datacatalog.css', 'media' => 'all'));
         }
     }
-
-    /**
-     * Try to find the dataset comments node (cache results)
-     * @return object node which has the dataset comments
-     * @access private
-     */
-    function _seek_data_comments()
-    {
-        if ($this->_config->get('data_comments_topic_guid'))
-        {
-            // We have a specified comments topic here
-            $comments_topic = midcom_db_topic::get_cached($this->_config->get('data_comments_topic_guid'));
-            if (   !is_object($comments_topic)
-                || !isset($comments_topic->guid)
-                || empty($comments_topic->guid))
-            {
-                return false;
-            }
-
-            // We got a topic. Make it a NAP node
-            $nap = new midcom_helper_nav();
-            $comments_node = $nap->get_node($comments_topic->id);
-
-            return $comments_node;
-        }
-
-        // No comments topic specified, autoprobe
-        $comments_node = midcom_helper_find_node_by_component('net.nehmer.comments');
-
-        return $comments_node;
-    }
- 
 }
 ?>

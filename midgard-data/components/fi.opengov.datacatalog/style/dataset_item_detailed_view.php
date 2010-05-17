@@ -69,6 +69,13 @@
   </div>
 <?php
     }
+    if (array_key_exists('comments_url', $data))
+    {
+?>
+  <div class="separator"></div>
+<?php
+        $_MIDCOM->dynamic_load($data['comments_url']);
+    }
 ?>
 
 </div>

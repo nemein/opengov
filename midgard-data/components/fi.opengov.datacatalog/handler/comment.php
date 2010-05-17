@@ -11,13 +11,13 @@
  *
  * @package fi.open.datacatalog
  */
-class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_components_handler
+class fi_opengov_datacatalog_handler_comment extends net_nehmer_comments_handler_view
 {
     /* navigation object */
     var $_navi = null;
 
-    /* the last n comments */
-    var $_comments = array();
+    /* number of comments gathered by default */
+    var $_num_of_comments = 0;
     
     /**
      * Simple default constructor.
@@ -32,10 +32,11 @@ class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_componen
      * @param string GUID of the blog topic
      * @param integer the last 'n' number of comments to be fetched 
      */
-    public function _get_last_blog_comments($number)
+    public function _get_last_blog_comments($number = -1)
     {
+        $_comments = array();
         $qb = net_nehmer_comments_comment::new_query_builder();
-        $qb->add_constraint('status', '=', 6);
+        $qb->add_constraint('status', '>=', 4);
         $_res = $qb->execute();
 
         foreach($_res as $comment)
@@ -46,15 +47,18 @@ class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_componen
             $_res2 = $qb2->execute();
             if (count($_res2))
             {
-                $this->_comments[$comment->metadata->created] = $comment;
-                krsort(&$this->_comments);
+                $_comments[$comment->metadata->created]['type'] = 'blog';
+                $_comments[$comment->metadata->created]['object'] = $comment;
+                krsort($_comments);
             }
         }
-
-        if (count($this->_comments) > $number)
+        if (   isset($number)
+            && $number != -1
+            && count($_comments) > $number)
         {
-            $this->_comments = array_splice($this->_comments, 0, $number);
+            $_comments = array_splice($_comments, 0, $number);
         }
+        return $_comments;
     }
 
     /**
@@ -62,33 +66,36 @@ class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_componen
      * @param string GUID of the blog topic
      * @param integer the last 'n' number of comments to be fetched 
      */
-    public function _get_last_dataset_comments($number)
+    public function _get_last_dataset_comments($number = -1)
     {
+        $_comments = array();
         $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
         $_res = $qb->execute();
 
         foreach($_res as $dataset)
         {
             $qb2 = net_nehmer_comments_comment::new_query_builder();
-            $qb2->add_constraint('status', '=', 6);
+            $qb2->add_constraint('status', '>=', 4);
             $qb2->add_constraint('objectguid', '=', $dataset->guid);
             $_res2 = $qb2->execute();
             if (count($_res2))
             {
                 foreach($_res2 as $comment)
                 {
-                    $this->_comments[$comment->metadata->created] = $comment;
+                    $_comments[$comment->metadata->created]['type'] = 'dataset';
+                    $_comments[$comment->metadata->created]['object'] = $comment;
                 }
-                krsort(&$this->_comments);
+                krsort($_comments);
             }
         }
-
-        if (count($this->_comments) > $number)
+        if (   isset($number)
+            && $number != -1
+            && count($_comments) > $number)
         {
-            $this->_comments = array_splice($this->_comments, 0, $number);
+            $_comments = array_splice($_comments, 0, $number);
         }
+        return $_comments;
     }
-
 
     /**
      * @param mixed $handler_id The ID of the handler.
@@ -99,6 +106,15 @@ class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_componen
     function _handler_read($handler_id, $args, &$data)
     {
         $_MIDCOM->skip_page_style = true;
+        if (isset($args[0])
+            && (int)$args[0])
+        {
+            $this->_num_of_comments = (int)$args[0];
+        }
+        else
+        {
+            $this->_num_of_comments = (int)$this->_config->get('number_of_comments_on_frontpage');
+        }
         return true;
     }
 
@@ -110,17 +126,36 @@ class fi_opengov_datacatalog_handler_comment extends midcom_baseclasses_componen
      */
     public function _show_read($handler_id, &$data)
     {
-        $this->_get_last_dataset_comments(10);
+        $_comments = $this->_get_last_dataset_comments() +  $this->_get_last_blog_comments();
 
-        if (count($this->_comments))
+        if (count($_comments))
         {
-            midcom_show_style('comment_list_header');
-            foreach($this->_comments as $comment)
+            krsort($_comments);
+            if (   isset($this->_num_of_comments)
+                && count($_comments) > $this->_num_of_comments)
             {
-                $this->_request_data['comment'] = $comment;
+                $_comments = array_splice($_comments, 0, $this->_num_of_comments);
+            }
+            midcom_show_style('comment_list_header');
+
+            foreach($_comments as $comment)
+            {
+                $this->_request_data['comment'] = $comment['object'];
+                switch($comment['type'])
+                {
+                    case 'dataset':
+                        $_object = new fi_opengov_datacatalog_dataset_dba($comment['object']->objectguid);
+                        break;
+                    case 'blog':
+                        $_object = new midcom_db_article($comment['object']->objectguid);
+                        break;
+                }
+                $this->_request_data['object'] = $_object;
+                $this->_request_data['object_permalink'] = $_MIDCOM->permalinks->create_permalink($_object->guid);
                 midcom_show_style('comment_list_item');
             }
             midcom_show_style('comment_list_footer');
         }
-    }         
+        unset($_comments);
+    }
 }

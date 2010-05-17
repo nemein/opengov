@@ -14,6 +14,9 @@
 'default_hours_icon' => 'stock-icons/16x16/stock_new-event.png',
 'default_reports_icon' => 'stock-icons/16x16/stock_new-event.png',
 
+/* allow comments */
+'allow_comments' => true,
+
 /* allow anonymous suggestions */
 'allow_anonymous' => true,
 'use_captcha' => true,
@@ -21,10 +24,17 @@
 /* The captcha widget config to use */
 'captcha_config' => Array(),
 
-/* The guid of the topic which holds dataset comments */
-'dataset_comments_topic_guid' => '',
+/* The id of the topic which holds datasets */
+'dataset_topic_id' => '',
 
 /* The id of the topic which holds blog posts */
 'blog_topic_id' => '',
+
+/* The id of the topic which holds dataset and blog comments */
+'comments_topic_id' => '',
+
+/* The number of comments that are indicated on the sidebar of the frontpage */
+'number_of_comments_on_frontpage' => '10',
+
 
 
