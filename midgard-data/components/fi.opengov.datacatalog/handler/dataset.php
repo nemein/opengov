@@ -86,6 +86,9 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             {
                 $arg = $args[0];
             }
+
+            $this->_populate_toolbar($handler_id);
+
             $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
                 'Failed to read dataset object (handler: ' . $handler_id . '/' . $arg . ')');
             //this will result in HTTP error 404
@@ -436,7 +439,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         }
         else 
         {
-            midcom_show_style('no_datasets');
+            midcom_show_style('no_dataset');
         }
     }
 
