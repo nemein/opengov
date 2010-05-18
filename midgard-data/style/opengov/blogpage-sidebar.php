@@ -2,7 +2,11 @@
     $free = fi_opengov_datacatalog_dataset_dba::get_number_of_datasets('free');
     $non_free = fi_opengov_datacatalog_dataset_dba::get_number_of_datasets('non-free');
     $all = $free + $non_free;
-    $percent = round($free / $all * 100);
+    $percent = 0;
+    if ($all)
+    {
+        $percent = round($free / $all * 100);
+    }
 ?>
 
 <div id="sidebar">
