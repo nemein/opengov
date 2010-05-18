@@ -220,7 +220,8 @@ p.priority span, p.wcag span {
 	color: #999;
 }
 
-#content {
+#content,
+#content.slim {
 	margin: 0 0 0 0;	
 	padding: 18px 18px;
 	background-color: #fff;
@@ -229,6 +230,10 @@ p.priority span, p.wcag span {
 	-webkit-border-radius: 7px 7px;
 	-moz-border-radius: 7px 7px;
 	border-radius: 7px 7px;
+}
+
+#content.slim {
+	min-height: 180px;
 }
 
 img.left {
