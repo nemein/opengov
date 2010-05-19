@@ -1,8 +1,9 @@
 <?php
 /*
- * Available $data keys: dataset, organization, license, format, class
+ * Available $data keys: dataset, permalink, organization, license, format, class
  */
     $dataset = $data['dataset'];
+    $permalink = $data['permalink'];
     $organization = $data['organization'];
     $license = $data['license'];
     $formats = $data['formats'];
@@ -12,7 +13,7 @@
 
 <div class="dataset_item &(class);">
   <div class="description">
-    <a class="title" href="view/&(dataset.id);">&(dataset.title);</a>
+    <a class="title" href="&(permalink);">&(dataset.title);</a>
     &(dataset.description);
   </div>
   <div class="org">
