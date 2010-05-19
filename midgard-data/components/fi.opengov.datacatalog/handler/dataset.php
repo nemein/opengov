@@ -328,13 +328,6 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         if ($this->_controller)
         {
             $this->_action = $this->_controller->process_form();
-            if (   $this->_action == 'save'
-                || $this->_action == 'cancel')
-            {
-                $this->_object->license = (int)array_pop($_POST['fi_opengov_datacatalog_license_chooser_widget_selections']);
-                $this->_object->update();
-                $_MIDCOM->relocate('view/' . $this->_object->id);
-            }        
         }
 
         $this->_request_data['object'] =& $this->_object;
@@ -405,7 +398,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 
                 /* fetch license info */
                 $this->_request_data['license'] = fi_opengov_datacatalog_info_dba::get_details($dataset->license, 'license');
-                
+
                 /* fetch formats info */
                 $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
 
@@ -451,7 +444,16 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_update($handler_id, &$data)
     {
-        midcom_show_style('dataset_edit');
+        if (   $this->_action == 'save'
+            || $this->_action == 'cancel')
+        {
+            $_MIDCOM->cache->invalidate($this->_object->guid);
+            $_MIDCOM->relocate('view/' . $this->_object->id);
+        }
+        else
+        {
+            midcom_show_style('dataset_edit');
+        }
     }            
 
    /**

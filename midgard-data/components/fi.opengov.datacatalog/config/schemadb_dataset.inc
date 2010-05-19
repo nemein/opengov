@@ -37,7 +37,7 @@
         'organization' => array
         (
             'title' => 'organization',
-            'storage' => null,
+            'storage' => 'organization',
             'required' => true,
             'type' => 'select',
             'type_config' => array
@@ -84,7 +84,7 @@
         'license' => array
         (
             'title' => 'license',
-            'storage' => null,
+            'storage' => 'license',
             'required' => true,
             'type' => 'select',
             'type_config' => array
