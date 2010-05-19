@@ -123,7 +123,7 @@ Help us building the catalog by suggesting a new dataset. Thank you.
 ---STRINGEND
 
 ---STRING suggestion_title
-dataset name (e.g. the state budget database)
+Dataset name (e.g. the state budget database)
 ---STRINGEND
 
 ---STRING suggestion_organization
@@ -180,4 +180,40 @@ Browse datasets by topic
 
 ---STRING commented_on
 commented on
+---STRINGEND
+
+---STRING create %s
+Create %s
+---STRINGEND
+
+---STRING edit %s
+Edit %s
+---STRINGEND
+
+---STRING delete %s
+Delete %s
+---STRINGEND
+
+---STRING view %s
+View %s
+---STRINGEND
+
+---STRING info_organization_information
+More information
+---STRINGEND
+
+---STRING info_organization_address
+Address
+---STRINGEND
+
+---STRING info_organization_contact
+Contact
+---STRINGEND
+
+---STRING info_title
+Title
+---STRINGEND
+
+---STRING info_license_type
+License type
 ---STRINGEND

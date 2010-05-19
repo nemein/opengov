@@ -1,7 +1,7 @@
 <?php
 /*
  * Available $data keys: dataset, permalink, organization, license, format, class
- */
+ */           
     $dataset = $data['dataset'];
     $permalink = $data['permalink'];
     $organization = $data['organization'];

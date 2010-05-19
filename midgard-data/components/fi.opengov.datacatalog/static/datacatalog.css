@@ -1,17 +1,20 @@
 div.dataset_list_info,
-div.dataset_suggestion_list_info {
+div.dataset_suggestion_list_info,
+div.info_list {
     padding: 0 0 1em 0;
     margin: 0 0 1em 0;
     border-bottom: 1px solid #999999;
 }
 
 div.dataset_list div.header,
-div.dataset_suggestion_list div.header {
+div.dataset_suggestion_list div.header,
+div.info_list div.header {
     border-bottom: 1px solid red;
 }
 
 div.dataset_list div.header div,
-div.dataset_suggestion_list div.header div {
+div.dataset_suggestion_list div.header div,
+div.info_list div.header div {
     font-weight: bold;
     background: #EFEFEF;
     height: 1.5em;
@@ -26,15 +29,18 @@ div.dataset_suggestion_item a.title {
 div.dataset_list div.header div,
 div.dataset_item div,
 div.dataset_suggestion_list div.header div,
-div.dataset_suggestion_item div
-{
+div.dataset_suggestion_item div,
+div.info_list div.header div,
+div.info_item div {
     display: inline-block;
     vertical-align: top;
     padding: 4px 5px;
 }
 
 div.dataset_list div.header .description,
-div.dataset_item .description {
+div.dataset_item .description,
+div.info_list div.header .title,
+div.info_item .title {
     width: 14em;
 }
 
@@ -44,7 +50,9 @@ div.dataset_suggestion_item .description {
 }
 
 div.dataset_list div.header .org,
-div.dataset_item .org {
+div.dataset_item .org,
+div.info_list div.header .type,
+div.info_item .type {
     width: 10em;
 }
 
@@ -64,7 +72,8 @@ div.dataset_item .open {
 }
 
 div.dataset_item_detail div,
-div.dataset_suggestion_item_detail div {
+div.dataset_suggestion_item_detail div,
+div.info_item_detail div {
     margin: 0 0 1em 0;
 }
 

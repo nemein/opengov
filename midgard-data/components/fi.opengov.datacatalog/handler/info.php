@@ -121,7 +121,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         $tmp[] = Array
         (
             MIDCOM_NAV_URL => "/",
-            MIDCOM_NAV_NAME => $this->_i18n->get_string('view_info'),
+            MIDCOM_NAV_NAME => sprintf($this->_i18n->get_string('view %s'), $this->_request_data['type']),
         );
         $_MIDCOM->set_custom_context_data('midcom.helper.nav.breadcrumb', $tmp);
     }
@@ -220,7 +220,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         if ($this->_request_data['controller'])
         {
-            $data['action'] = $this->_request_data['controller']->process_form();
+            $this->_action = $this->_request_data['controller']->process_form();
         }
         
         return true;
@@ -271,8 +271,6 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         $this->_load_object($handler_id, $args, $data);
         $this->_load_schemadb();
-//        $this->_load_datamanager();
-//        $this->_datamanager->set_schema($this->_request_data['type']);
         $this->_load_controller($handler_id);
 
         if ($this->_request_data['controller'])
@@ -307,18 +305,24 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
 
         $this->_load_object($handler_id, $args, $data);
         $this->_load_schemadb();
-//        $this->_load_datamanager();
-//        $this->_datamanager->set_schema($this->_request_data['type']);
+        $this->_load_controller($handler_id);
+
+        if ($this->_request_data['controller'])
+        {
+            $this->_request_data['controller']->process_form();
+        }
               
-        if (array_key_exists('fi_opengov_datacatalog_info_delete_ok', $_POST))
+        if (array_key_exists('crud_delete', $_POST))
         {
             if ($this->_object->delete())
             {
-                /* @todo: redirect somewhere */
-                $_MIDCOM->relocate('');
+                $this->_action = 'delete';
             }
-            $_MIDCOM->relocate('');            
-            /* @todo: what happens at cancel? */
+        }
+        
+        if (array_key_exists('crud_cancel', $_POST))
+        {
+            $this->_action = 'cancel';
         }
         
         return true;
@@ -347,9 +351,8 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
                 case 'format':
                     break;
             }
-            $this->_request_data['class'] = 'odd';
             $this->_request_data['info'] = $this->_object;
-            midcom_show_style('info_item_view');
+            midcom_show_style('info_item_detailed_view');
         }
         else
         {
@@ -365,13 +368,50 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _show_create($handler_id, &$data)
     {
-        if ($this->_object)
+        if (strpos($handler_id, '_create_chooser'))
         {
-            $data['jsdata'] = $this->object_to_jsdata($this->_schemadb, $this->_object);
-            midcom_show_style('info_create_after');
-        } else
-        {  
-            midcom_show_style('info_create');
+            midcom_show_style('popup_header');
+
+            /* pass on the action to the style snippet */
+            $this->_request_data['action'] = $this->_action;
+
+            /* set the handler name, that is used in javascript to close the popup properly */
+            $_component = str_replace('.', '_', $_MIDCOM->get_context_data(MIDCOM_CONTEXT_COMPONENT));
+            $this->_request_data['handler'] =  $_component . '_' . $this->_request_data['type'];
+
+            if ($this->_action == 'cancel')
+            {
+                midcom_show_style('info_create_after');
+            }
+            else
+            {
+                if (   $this->_object
+                    && $this->_action == 'save')
+                {
+                    $data['jsdata'] = $this->_object_to_jsdata($this->_object);
+                    midcom_show_style('info_create_after');
+                }
+                else
+                {
+                    midcom_show_style('create');
+                }
+            }
+            midcom_show_style('popup_footer');
+            return;
+        }
+        else
+        {
+            switch ($this->_action)
+            {
+                case 'save':
+                    $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                    break;
+                case 'cancel':
+                    $_MIDCOM->relocate($_MIDCOM->permalinks->resolve_permalink($this->_topic->guid));
+                    break;
+                default:
+                    midcom_show_style('create');
+            }
         }
     }          
 
@@ -383,7 +423,32 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _show_delete($handler_id, &$data)
     {
-        midcom_show_style('info_delete');
+        switch ($this->_action)
+        {
+            case 'delete':
+                $_MIDCOM->relocate($_MIDCOM->permalinks->resolve_permalink($this->_topic->guid));
+                break;
+            case 'cancel':
+                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                break;
+            default:
+                switch ($this->_request_data['type'])
+                {
+                    case 'organization':
+                        $this->_request_data['organization_information'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_information');
+                        $this->_request_data['organization_address'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_address');
+                        $this->_request_data['organization_contact'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_contact');
+                        break;
+                    case 'license':
+                        $this->_request_data['license_type'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'license_type');
+                        break;
+                    case 'format':
+                        break;
+                }
+                $this->_request_data['class'] = 'odd';
+                $this->_request_data['info'] = $this->_object;
+                midcom_show_style('delete');
+        }
     }
 
    /**
@@ -399,17 +464,16 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
             case 'save': 
             case 'cancel':
                 $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
-                //midcom_show_style('info_edit_after');
                 break;
             default:
-                midcom_show_style('info_edit');
+                midcom_show_style('edit');
         }
     }                
     
     /**
      * @todo: docs
      */
-    function object_to_jsdata($schemadb, &$object)
+    function _object_to_jsdata($schemadb, &$object)
     {
         $id = @$object->id;
         $guid = @$object->guid;
@@ -440,5 +504,17 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         $jsdata .= "}";
     
         return $jsdata;
+    }
+
+    /**
+     * returns the URL of a chooser
+     * called from the datamanager schema
+     * @param string chooser relative URL
+     * @return string full URL
+     *
+     */
+    function get_chooser_url($relative)
+    {
+        return $_MIDCOM->permalinks->resolve_permalink($this->_topic->guid) . '/' . $relative;
     }
 }

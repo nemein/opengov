@@ -109,8 +109,10 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      * @param type of the controller (e.g. simple, create)
      * @access private
      */
-    function _load_controller($type)
+    function _load_controller($type = null)
     {
+        $this->_request_data['type'] = 'dataset';
+
         $this->_controller =& midcom_helper_datamanager2_controller::create($type);
         $this->_controller->schemadb =& $this->_schemadb;
         $this->_controller->callback_object =& $this;
@@ -344,7 +346,26 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     function _handler_delete($handler_id, $args, &$data)
     {
-        return parent::_handler_delete($handler_id, $args, &$data);
+        $this->_request_data['topic']->require_do('midgard:delete');
+        $this->_request_data['type'] = preg_replace('/_.*/', '', $handler_id);
+
+        $this->_load_object($handler_id, $args, $data);
+        $this->_load_schemadb();
+
+        if (array_key_exists('crud_delete', $_POST))
+        {
+            if ($this->_object->delete())
+            {
+                $this->_action = 'delete';
+            }
+        }
+        
+        if (array_key_exists('crud_cancel', $_POST))
+        {
+            $this->_action = 'cancel';
+        }
+        
+        return true;
     }
     
     /**
@@ -367,7 +388,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_create($handler_id, &$data)
     {
-        midcom_show_style('dataset_create');
+        $this->_request_data['type'] = 'dataset';
+        midcom_show_style('create');
     }          
 
    /**
@@ -385,6 +407,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             if ($this->_show_list)
             {
                 $this->_request_data['filter'] = $this->_filter;
+                midcom_show_style('dataset_list_intro');
                 midcom_show_style('dataset_list_header');
             }
             $i = 0;
@@ -447,7 +470,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         }
         else
         {
-            midcom_show_style('dataset_edit');
+            $this->_request_data['type'] = 'dataset';
+            midcom_show_style('edit');
         }
     }            
 
@@ -459,7 +483,24 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _show_delete($handler_id, &$data)
     {
-        midcom_show_style('dataset_delete');
+        switch($this->_action)
+        {
+            case 'cancel':
+                $_MIDCOM->relocate('view/' . $this->_object->id);
+                break;
+            case 'delete':
+                $_MIDCOM->relocate('');
+                break;
+            default:
+                $this->_request_data['type'] = 'dataset';
+                $this->_request_data['dataset'] = $this->_object;
+                $this->_request_data['permalink'] = $_MIDCOM->permalinks->create_permalink($this->_object->guid);
+                $this->_request_data['organization'] = fi_opengov_datacatalog_info_dba::get_details($this->_object->organization, 'organization');
+                $this->_request_data['license'] = fi_opengov_datacatalog_info_dba::get_details($this->_object->license, 'license');
+                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($this->_object->id);
+                $this->_request_data['class'] = 'odd';
+                midcom_show_style('delete');
+        }
     }
 
    /**

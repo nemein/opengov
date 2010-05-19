@@ -1046,3 +1046,7 @@ div#content .first
 div.discuss {
     clear: both;
 }
+
+table.mceLayout {
+    width: 510px;
+}

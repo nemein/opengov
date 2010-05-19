@@ -1,7 +1,9 @@
 <?php
-/*
- * Available $data keys: $info
- */
+    /*
+     * Available $data keys:
+     *  info, type, class, organization_information, organization_address, organization_contact
+     *  license_type
+     */
     $info = $data['info'];
     $class = $data['class'];    
 ?>

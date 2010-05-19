@@ -20,6 +20,7 @@ class fi_opengov_datacatalog_interface extends midcom_baseclasses_components_int
     {
         parent::__construct();
         $this->_component = 'fi.opengov.datacatalog';
+        $this->_component_id = 'fi_opengov_datacatalog';
     }
 
     /**

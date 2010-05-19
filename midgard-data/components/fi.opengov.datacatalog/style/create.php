@@ -1,4 +1,4 @@
-<h1><?php echo $data['l10n']->get('create_info'); ?></h1>
+<h1><?php echo sprintf($data['l10n']->get('create %s'), $data['type']); ?></h1>
 
 <?php
     if(isset($data['controller']))
