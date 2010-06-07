@@ -17,7 +17,7 @@
         </div>
         <div class="statustext">
             Tämänhetkinen tilanne: &(all); dataseteistä vain 
-            <a href="/data"> &(free); ovat avoimia</a>.
+            <a href="/data/open"> &(free); ovat avoimia</a>.
         </div>
         <div class="clear"></div>
     </div>
