@@ -193,6 +193,8 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         if (   $_MIDCOM->auth->user
             || $this->_config->get('allow_anonymous'))
         {
+           return parent::_handler_create($handler_id, $args, &$data);
+/*
             $this->_load_schemadb();
             $this->_load_controller('create');
 
@@ -201,7 +203,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
                 switch ($this->_request_data['controller']->process_form())
                 {
                     case 'save':
-                        /* Fall-through */
+                        // Fall-through
                     case 'cancel':
                         if (! $_MIDCOM->auth->user)
                         {
@@ -210,6 +212,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
                 }                        
             }
             return true;
+*/
         }
         else
         {
