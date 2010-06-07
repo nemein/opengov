@@ -16,7 +16,7 @@
             'title' => 'description',
             'storage' => 'description',
             'type'    => 'text',
-            'widget' => 'text',
+            'widget' => 'textarea',
             'required' => true,
         ),
         'url' => array
@@ -130,7 +130,7 @@
         ),
         'format' => array
         (
-            'title' => 'format',
+            'title' => 'formats',
             'storage' => null,
             'required' => true,
             'type' => 'mnrelation',
