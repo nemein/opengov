@@ -35,9 +35,9 @@ class fi_opengov_datacatalog_interface extends midcom_baseclasses_components_int
     {
         $_url = null;
         $_dataset = new fi_opengov_datacatalog_dataset_dba($guid);
-        if (isset($_dataset->id))
+        if (isset($_dataset->guid))
         {
-            $_url = 'view/' . $_dataset->id;
+            $_url = 'view/' . $_dataset->guid;
         }
         unset($_dataset);
         return $_url;

@@ -44,11 +44,10 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             case 'view':
             case 'edit':
             case 'delete':
-                if (   isset($args[0])
-                    && is_numeric($args[0]))
+                if (isset($args[0]))
                 {
                     $this->_show_list = false;
-                    $qb->add_constraint('id', '=', $args[0]);
+                    $qb->add_constraint('guid', '=', $args[0]);
                 }
                 break;
         }
@@ -68,7 +67,6 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         if (count($this->_datasets))
         {
             if (   isset($args[0])
-                && is_numeric($args[0])
                 && ($handler_id == 'view'
                 || $handler_id == 'edit'
                 || $handler_id == 'delete'))
@@ -157,53 +155,60 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      * Add menu items to toolbar
      *
      * @param mixed $handler_id The ID of the handler.
+     *
      */
     public function _populate_toolbar($handler_id)
     {
-        if (isset($this->_object))
-        {
-            if (   $this->_object->can_do('midgard:update')
-                && $handler_id != 'edit')
-            {
-                $this->_view_toolbar->add_item
-                (
-                    array
-                    (
-                        MIDCOM_TOOLBAR_URL => "edit/" . $this->_object->id,
-                        MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('edit_dataset'),
-                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
-                    )
-                );
-            }
-            if (   $this->_object->can_do('midgard:delete')
-                && $handler_id != 'delete')
-            {
-                $this->_view_toolbar->add_item
-                (
-                    array
-                    (
-                        MIDCOM_TOOLBAR_URL => "delete/" . $this->_object->id,
-                        MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('delete_dataset'),
-                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
-                    )
-                );
-            }
-        }
-        if (   $handler_id != 'create'
-            && $this->_topic->can_do('midgard:create'))
+        parent::_populate_toolbar($handler_id);
+        
+        if ($this->_topic->can_do('midgard:admin'))
         {
             $this->_node_toolbar->add_item
             (
                 array
                 (
-                    MIDCOM_TOOLBAR_URL => "create/",
-                    MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('create_dataset'),
-                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
+                    MIDCOM_TOOLBAR_URL => "suggestion/view/all",
+                    MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('approve_dataset_suggestions'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
+
+            if (isset($this->_object->license))
+            {
+                $license_guid = fi_opengov_datacatalog_info_dba::get_guid($this->_object->license);
+                if ($license_guid)
+                {
+                    $this->_view_toolbar->add_item
+                    (
+                        array
+                        (
+                            MIDCOM_TOOLBAR_URL => "license/view/" . $license_guid,
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'license'),
+                            MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                        )
+                    );
+                }
+            }
+            
+            if (isset($this->_object->id))
+            {
+                $formats = fi_opengov_datacatalog_dataset_dba::get_formats($this->_object->id);
+                foreach ($formats as $format)
+                {
+                    $this->_view_toolbar->add_item
+                    (
+                        array
+                        (
+                            MIDCOM_TOOLBAR_URL => "format/view/" . $format->guid,
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'format: ' . $format->title),
+                            MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                        )
+                    );
+                }
+            }
         }
     }
-
+    
     /**
      * Object create callback
      *
@@ -258,7 +263,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 $i = 0;
                 foreach ($this->_datasets as $dataset)
                 {
-                    if (fi_opengov_datacatalog_dataset_dba::matching_license_type($dataset->id, $_type))
+                    if (fi_opengov_datacatalog_dataset_dba::matching_license_type($dataset->guid, $_type))
                     {
                         $_filtered[] = $dataset;
                     }
@@ -466,7 +471,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             || $this->_action == 'cancel')
         {
             $_MIDCOM->cache->invalidate($this->_object->guid);
-            $_MIDCOM->relocate('view/' . $this->_object->id);
+            $_MIDCOM->relocate('view/' . $this->_object->guid);
         }
         else
         {
@@ -486,7 +491,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         switch($this->_action)
         {
             case 'cancel':
-                $_MIDCOM->relocate('view/' . $this->_object->id);
+                $_MIDCOM->relocate('view/' . $this->_object->guid);
                 break;
             case 'delete':
                 $_MIDCOM->relocate('');

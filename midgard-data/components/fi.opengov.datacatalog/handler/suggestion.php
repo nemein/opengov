@@ -34,7 +34,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
     public function _load_object($handler_id, $args, &$data)
     {
         $qb = fi_opengov_datacatalog_dataset_suggestion_dba::new_query_builder();
-        $qb->add_constraint('id', '=', $args[0]);
+        $qb->add_constraint('guid', '=', $args[0]);
         $_res = $qb->execute();
         
         if (count($_res))
@@ -132,6 +132,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      *
      * @param mixed $handler_id The ID of the handler.
      */
+/*
     public function _populate_toolbar($handler_id)
     {
         if (! $this->_object)
@@ -154,6 +155,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
             }
         }
     }
+*/
 
     /**
      * Object create callback
@@ -194,25 +196,6 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
             || $this->_config->get('allow_anonymous'))
         {
            return parent::_handler_create($handler_id, $args, &$data);
-/*
-            $this->_load_schemadb();
-            $this->_load_controller('create');
-
-            if ($this->_request_data['controller'])
-            {
-                switch ($this->_request_data['controller']->process_form())
-                {
-                    case 'save':
-                        // Fall-through
-                    case 'cancel':
-                        if (! $_MIDCOM->auth->user)
-                        {
-                            $_MIDCOM->auth->drop_sudo();
-                        }
-                }                        
-            }
-            return true;
-*/
         }
         else
         {
@@ -243,7 +226,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
                 {
                     if ($args[0] != 'all')
                     {
-                        $qb->add_constraint('id', '=', $args[0]);
+                        $qb->add_constraint('guid', '=', $args[0]);
                     }
                 }
                 break;
@@ -358,7 +341,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         {
             case 'save':
             case 'cancel':
-                $_MIDCOM->relocate('suggestion/view/' . $this->_object->id);
+                $_MIDCOM->relocate('suggestion/view/' . $this->_object->guid);
                 break;
             default:
                 midcom_show_style('dataset_suggestion_edit');

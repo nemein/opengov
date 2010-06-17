@@ -118,6 +118,10 @@ Edit suggestion
 Delete suggestion
 ---STRINGEND
 
+---STRING approve_dataset_suggestions
+Approve dataset suggestions
+---STRINGEND
+
 ---STRING create_suggestion_info
 Help us building the catalog by suggesting a new dataset. Thank you.
 ---STRINGEND

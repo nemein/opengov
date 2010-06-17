@@ -17,7 +17,7 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
 {
     /*
      * Finds and returns formats of a dataset
-     * @param integer ID of the dataset
+     * @param integer id of the dataset
      * @return array storing the title and URL of the format's
      */
     public function get_formats($id = null)
@@ -84,16 +84,16 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
 
     /**
      * Checks the license type of the dataset
-     * @param integer id of the dataset
+     * @param GUID guid of the dataset
      * @param string type; can be free or non-free
      * @return boolean true, if the dataset license type macthes the given criteria
      */
-    public function matching_license_type($dataset_id, $type)
+    public function matching_license_type($dataset_guid, $type)
     {
         $retval = false;
 
         $qb = fi_opengov_datacatalog_dataset_dba::new_query_builder();
-        $qb->add_constraint('id', '=', $dataset_id);
+        $qb->add_constraint('guid', '=', $dataset_guid);
         $res = $qb->execute();
 
         if (count($res) == 1)

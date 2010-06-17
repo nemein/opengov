@@ -41,7 +41,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     public function _load_object($handler_id, $args, &$data)
     {
         $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
-        $qb->add_constraint('id', '=', $args[0]);
+        $qb->add_constraint('guid', '=', $args[0]);
         $qb->add_constraint('type', '=', $this->_request_data['type']);
         $_res = $qb->execute();
         
@@ -141,9 +141,36 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _populate_toolbar($handler_id)
     {
-        if (! $this->_object)
+        if ($this->_topic->can_do('midgard:admin'))
         {
-            return;
+            $label = '';
+            switch($handler_id)
+            {
+                case 'license_view':
+                    $label = 'license';
+                    break;                    
+                case 'format_view':
+                    $label = 'format';
+                    break;
+            }
+            $this->_view_toolbar->add_item
+            (
+                array
+                (
+                    MIDCOM_TOOLBAR_URL => $label . "/edit/". $this->_object->guid,
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('edit %s'), $label),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
+                )
+            );
+            $this->_view_toolbar->add_item
+            (
+                array
+                (
+                    MIDCOM_TOOLBAR_URL => $label . "/delete/". $this->_object->guid,
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('delete %s'), $label),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
+                )
+            );
         }
     }
 
@@ -404,7 +431,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
             switch ($this->_action)
             {
                 case 'save':
-                    $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                    $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->guid);
                     break;
                 case 'cancel':
                     $_MIDCOM->relocate($_MIDCOM->permalinks->resolve_permalink($this->_topic->guid));
@@ -429,7 +456,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
                 $_MIDCOM->relocate($_MIDCOM->permalinks->resolve_permalink($this->_topic->guid));
                 break;
             case 'cancel':
-                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->guid);
                 break;
             default:
                 switch ($this->_request_data['type'])
@@ -463,7 +490,7 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
         {
             case 'save': 
             case 'cancel':
-                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->id);
+                $_MIDCOM->relocate($this->_request_data['type'] . '/view/' . $this->_object->guid);
                 break;
             default:
                 midcom_show_style('edit');

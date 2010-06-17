@@ -54,5 +54,25 @@ class fi_opengov_datacatalog_info_dba extends __fi_opengov_datacatalog_info_dba
         }        
         return $details;
     }
+
+    /**
+     * Finds and returns the info's guid
+     * @param integer id of the info
+     * @return string guid of the info object
+     */
+    public function get_guid($id = null)
+    {
+        $guid = null;
+        if (isset($id))
+        {
+            $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
+            $qb->add_constraint('id', '=', $id);
+            $_res = $qb->execute();
+            $guid = $_res[0]->guid;
+            unset($_res);
+            unset($qb);
+        }
+        return $guid;
+    }
 }
 ?>
