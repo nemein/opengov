@@ -142,6 +142,22 @@ Description (data format, license terms, etc.)
 Link to information page about the dataset
 ---STRINGEND
 
+---STRING suggestion_view
+View suggestion(s)
+---STRINGEND
+
+---STRING suggestion_edit
+Edit suggestion
+---STRINGEND
+
+---STRING suggestion_create
+Create suggestion
+---STRINGEND
+
+---STRING suggestion_delete
+Delete suggestion
+---STRINGEND
+
 ---STRING tags
 Tags separated by space (e.g. economics statistics)
 ---STRINGEND

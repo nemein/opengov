@@ -114,7 +114,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         $tmp[] = Array
         (
             MIDCOM_NAV_URL => "/",
-            MIDCOM_NAV_NAME => $this->_i18n->get_string('view_datasets'),
+            MIDCOM_NAV_NAME => $this->_i18n->get_string($handler_id),
         );
         $_MIDCOM->set_custom_context_data('midcom.helper.nav.breadcrumb', $tmp);
     }
@@ -140,11 +140,32 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         }
         else
         {
+            if ($this->_object->can_do('midgard:admin'))
+            {
+                $this->_view_toolbar->add_item
+                (
+                    array
+                    (
+                        MIDCOM_TOOLBAR_URL => 'suggestion/edit/' . $this->_object->guid,
+                        MIDCOM_TOOLBAR_LABEL => sprintf($this->_l10n_midcom->get('edit %s'), 'suggestion'),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
+                    )
+                );
+                $this->_view_toolbar->add_item
+                (
+                    array
+                    (
+                        MIDCOM_TOOLBAR_URL => 'suggestion/delete/' . $this->_object->guid,
+                        MIDCOM_TOOLBAR_LABEL => sprintf($this->_l10n_midcom->get('delete %s'), 'suggestion'),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
+                    )
+                );
+            }
             if ($this->_object->can_do('midgard:create'))
             {
                 $url = "create?";
                 $defaults = array();
-
+                $defaults['suggestion'] = $this->_object->guid;
                 $defaults['title'] = $this->_object->title;
                 $defaults['description'] = $this->_object->description;
                 $defaults['organization'] = $this->_object->organization;
@@ -285,6 +306,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
             $this->_action = $this->_request_data['controller']->process_form();
         }
 
+        $this->_update_breadcrumb($handler_id);
         $this->_request_data['object'] =& $this->_object;
 
         return true;
@@ -298,6 +320,7 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      */
     function _handler_delete($handler_id, $args, &$data)
     {
+//        $this->_action = 'delete';
         return parent::_handler_delete($handler_id, $args, &$data);
     }
     
@@ -380,6 +403,17 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      */
     public function _show_delete($handler_id, &$data)
     {
-        midcom_show_style('dataset_suggestion_delete');
+        switch($this->_action)
+        {
+            case 'cancel':
+                $_MIDCOM->relocate('suggestion/view/' . $this->_object->guid);
+                break;
+            case 'delete':
+                $_MIDCOM->relocate('');
+                break;
+            default:
+                $this->_request_data['suggestion'] = $this->_object;
+                midcom_show_style('dataset_suggestion_delete');
+        }
     }
 }

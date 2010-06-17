@@ -2,7 +2,7 @@
 /*
  * Available $data keys: suggestion
  */
-    $suggestion = $data['dataset'];
+    $suggestion = $data['suggestion'];
 ?>
 
 <h2>&(suggestion.title);</h2>

@@ -143,12 +143,12 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         {
             foreach ($_GET['defaults'] as $key => $value)
             {
-                if ( ! isset($this->_schemadb['default']->fields[$key]) )
+                if ( ! isset($this->_schemadb['default']->fields[$key])
+                    && $key != 'suggestion')
                 {
                     // No such field in schema
                     continue;
                 }
-                echo $key;
                 $this->_defaults[$key] = $value;
             }
         }
@@ -164,7 +164,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         $tmp[] = Array
         (
             MIDCOM_NAV_URL => "/",
-            MIDCOM_NAV_NAME => $this->_i18n->get_string('view_datasets'),
+            MIDCOM_NAV_NAME => sprintf($this->_i18n->get_string($handler_id . ' %s'), 'dataset'),
         );
         $_MIDCOM->set_custom_context_data('midcom.helper.nav.breadcrumb', $tmp);
     }
@@ -264,6 +264,13 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
                 'Failed to create a new dataset, cannot continue. Last Midgard error was: '. midcom_application::get_error_string());
             // This will exit.
+        }
+
+        /* if the dataset is created based on a suggestion then delete the suggestion */
+        if (isset($this->_defaults['suggestion']))
+        {
+            $suggestion = new fi_opengov_datacatalog_dataset_suggestion_dba($this->_defaults['suggestion']);
+            $suggestion->delete();
         }
 
         return $this->_object;

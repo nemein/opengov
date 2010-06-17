@@ -24,6 +24,7 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
     {
         $type = 'format';
         $details = array();
+        $formats = array();
         if (   $id
             && $type != '')
         {
@@ -40,6 +41,7 @@ class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_datase
                 $_formats = $qb->execute();
                 $formats[] = $_formats[0];
             }
+            unset($details);
             unset($_formats);
             unset($_res);
             unset($qb);
