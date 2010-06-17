@@ -132,7 +132,6 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      *
      * @param mixed $handler_id The ID of the handler.
      */
-/*
     public function _populate_toolbar($handler_id)
     {
         if (! $this->_object)
@@ -143,19 +142,39 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         {
             if ($this->_object->can_do('midgard:create'))
             {
+                $url = "create?";
+                $defaults = array();
+
+                $defaults['title'] = $this->_object->title;
+                $defaults['description'] = $this->_object->description;
+                $defaults['organization'] = $this->_object->organization;
+                $defaults['url'] = $this->_object->url;
+                $defaults['tags'] = '';
+                $tags = net_nemein_tag_handler::get_tags_by_guid($this->_object->guid);
+
+                if (is_array($tags))
+                {
+                    $defaults['tags'] = implode(" ", array_keys($tags));
+                }
+
+                foreach($defaults as $key => $value)
+                {
+                    $url .= "defaults[$key]=$value&";
+                }
+                $url = substr($url, 0, -1);
+                
                 $this->_view_toolbar->add_item
                 (
                     array
                     (
-                        MIDCOM_TOOLBAR_URL => "../create/",
-                        MIDCOM_TOOLBAR_LABEL => $this->_l10n_midcom->get('create_dataset'),
+                        MIDCOM_TOOLBAR_URL => $url,
+                        MIDCOM_TOOLBAR_LABEL => sprintf($this->_l10n_midcom->get('create %s'), 'dataset from suggestion'),
                         MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
                     )
                 );
             }
         }
     }
-*/
 
     /**
      * Object create callback
@@ -233,6 +252,11 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         }
 
         $this->suggestions = $qb->execute();
+    
+        if (count($this->suggestions) == 1)
+        {
+            $this->_object = $this->suggestions[0];
+        }
 
         $this->_update_breadcrumb($handler_id);
         $this->_populate_toolbar($handler_id);

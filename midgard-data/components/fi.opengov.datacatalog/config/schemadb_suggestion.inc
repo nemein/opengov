@@ -38,7 +38,7 @@
         ),
         'tags' => Array
         (
-            'title' => 'suggestion_tags',
+            'title' => 'tags',
             'type' => 'tags',
             'widget' => 'text',
             'hidden' => false,

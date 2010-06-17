@@ -142,7 +142,7 @@ Description (data format, license terms, etc.)
 Link to information page about the dataset
 ---STRINGEND
 
----STRING suggestion_tags
+---STRING tags
 Tags separated by space (e.g. economics statistics)
 ---STRINGEND
 
@@ -172,10 +172,6 @@ Suggested datasets
 
 ---STRING dataset_suggestion_list_info
 Below is the list of suggested datasets we have in our system.
----STRINGEND
-
----STRING tags
-Tags separated by space (e.g. music art fun)
 ---STRINGEND
 
 ---STRING browse_by_tags

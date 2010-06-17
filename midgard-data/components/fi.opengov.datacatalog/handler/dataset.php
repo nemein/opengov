@@ -115,6 +115,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         $this->_controller->schemadb =& $this->_schemadb;
         $this->_controller->callback_object =& $this;
         $this->_controller->schemaname = 'default';
+        $this->_controller->defaults = $this->_defaults;
+
         $this->_datamanager =& $this->_controller->datamanager;
 
         if ($type == 'simple')
@@ -125,6 +127,30 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         if (! $this->_controller->initialize())
         {
             $_MIDCOM->generate_error(MIDCOM_ERRCRIT, "Failed to initialize a DM2 create controller.");
+        }
+    }
+
+
+ 
+    /**
+     * Loads default values for the creation controller.
+     */
+    public function _load_defaults()
+    {
+        // Allow setting defaults from query string, useful for things like "create event for today" and chooser
+        if (   isset($_GET['defaults'])
+            && is_array($_GET['defaults']))
+        {
+            foreach ($_GET['defaults'] as $key => $value)
+            {
+                if ( ! isset($this->_schemadb['default']->fields[$key]) )
+                {
+                    // No such field in schema
+                    continue;
+                }
+                echo $key;
+                $this->_defaults[$key] = $value;
+            }
         }
     }
 
@@ -167,8 +193,17 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             (
                 array
                 (
+                    MIDCOM_TOOLBAR_URL => "create",
+                    MIDCOM_TOOLBAR_LABEL => sprintf(    $this->_i18n->get_string('create %s'), 'dataset'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_new_icon'),
+                )
+            );
+            $this->_node_toolbar->add_item
+            (
+                array
+                (
                     MIDCOM_TOOLBAR_URL => "suggestion/view/all",
-                    MIDCOM_TOOLBAR_LABEL => $this->_i18n->get_string('approve_dataset_suggestions'),
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all suggestions'),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
