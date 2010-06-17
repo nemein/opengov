@@ -161,11 +161,22 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
      */
     public function _update_breadcrumb($handler_id)
     {
-        $tmp[] = Array
-        (
-            MIDCOM_NAV_URL => "/",
-            MIDCOM_NAV_NAME => sprintf($this->_i18n->get_string($handler_id . ' %s'), 'dataset'),
-        );
+        if ($handler_id != '')
+        {
+            $tmp[] = Array
+            (
+                MIDCOM_NAV_URL => "/",
+                MIDCOM_NAV_NAME => sprintf($this->_i18n->get_string($handler_id . ' %s'), 'dataset'),
+            );
+        }
+        else
+        {
+            $tmp[] = Array
+            (
+                MIDCOM_NAV_URL => "/",
+                MIDCOM_NAV_NAME => $this->_i18n->get_string('dataset_list'),
+            );
+        }
         $_MIDCOM->set_custom_context_data('midcom.helper.nav.breadcrumb', $tmp);
     }
 

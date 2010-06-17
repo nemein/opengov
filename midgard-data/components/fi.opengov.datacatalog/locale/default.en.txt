@@ -35,7 +35,15 @@ No information was recorded
 ---STRINGEND
 
 ---STRING dataset_list
-Datasets
+List of datasets
+---STRINGEND
+
+---STRING topic %s
+List of datasets
+---STRINGEND
+
+---STRING open %s
+List of open datasets
 ---STRINGEND
 
 ---STRING dataset_latest_additions
