@@ -8,7 +8,7 @@
 
 <div class="dataset_suggestion_item &(class);">
   <div class="description">
-    <a class="title" href="/data/suggestion/view/&(suggestion.id);">&(suggestion.title);</a>
+    <a class="title" href="/data/suggestion/view/&(suggestion.guid);">&(suggestion.title);</a>
     &(suggestion.description);
   </div>
   <div class="org">
