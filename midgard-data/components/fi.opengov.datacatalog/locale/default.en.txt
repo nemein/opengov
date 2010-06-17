@@ -217,3 +217,11 @@ Title
 ---STRING info_license_type
 License type
 ---STRINGEND
+
+---STRING related_dataset
+Related dataset
+---STRINGEND
+
+---STRING related_blog_posts
+Related blog post(s)
+---STRINGEND

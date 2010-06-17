@@ -8,6 +8,7 @@
     $formats = $data['formats'];
     $tags = $data['tags'];
     $open = $data['l10n']->get('yes');
+    $blogposts = $data['blogposts'];
 ?>
 
 <h2>&(dataset.title);</h2>
@@ -67,6 +68,28 @@
 ?>
     </ul>
   </div>
+
+<?php
+    }
+    if (count($blogposts))
+    {
+?>
+
+  <div>
+    <label><?php echo $data['l10n']->get('related_blog_posts'); ?></label>
+    <ul class="blogposts">
+    <?php
+    foreach($blogposts as $post)
+    {
+        $url = $_MIDCOM->permalinks->create_permalink($post->guid);
+    ?>
+        <li><a href="&(url);">&(post.title);</a></li>
+    <?php
+    }
+    ?>
+    </ul>
+  </div>
+
 <?php
     }
     if (array_key_exists('comments_url', $data))

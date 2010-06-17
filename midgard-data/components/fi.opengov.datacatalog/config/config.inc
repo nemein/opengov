@@ -2,6 +2,7 @@
 'schemadb_dataset' => 'file:/fi/opengov/datacatalog/config/schemadb_dataset.inc',
 'schemadb_info' => 'file:/fi/opengov/datacatalog/config/schemadb_info.inc',
 'schemadb_suggestion' => 'file:/fi/opengov/datacatalog/config/schemadb_suggestion.inc',
+'schemadb_blog' => 'file:/fi/opengov/datacatalog/config/schemadb_blog.inc',
 
 'use_default_style' => true,
 

@@ -1050,3 +1050,13 @@ div.discuss {
 table.mceLayout {
     width: 510px;
 }
+
+span#net_nehmer_blog_content_parent
+{
+    width: 542px;
+}
+
+table#net_nehmer_blog_content_tbl
+{
+    width: 540px;
+}

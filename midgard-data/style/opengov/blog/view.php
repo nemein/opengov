@@ -8,12 +8,25 @@ $publish_time = $data['article']->metadata->published;
 $published = strftime('%Y-%m-%d', $publish_time);
 $permalink = $_MIDCOM->permalinks->create_permalink($data['article']->guid);
 $prefix = $_MIDCOM->get_context_data(MIDCOM_CONTEXT_ANCHORPREFIX);
+$dataset = new fi_opengov_datacatalog_dataset_dba($data['article']->get_parameter('net.nehmer.blog', 'dataset'));
+$dataset_permalink = $_MIDCOM->permalinks->create_permalink($dataset->guid);
 ?>
 
 <div class="hentry">
     <h1 class="headline">&(view['title']:h);</h1>
 
     <p class="published">&(published);</p>
+    
+    <?php
+        if (   isset($dataset_permalink)
+            && is_object($dataset))
+        {
+    ?>
+    <p class="dataset"><a href="&(dataset_permalink);">&(dataset.title);</a></p>
+    <?php
+        }
+    ?>
+
     <p class="excerpt">&(view['abstract']:h);</p>
 
     <div class="content">

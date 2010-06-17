@@ -465,6 +465,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 {
                     /* fetch and populate tags */
                     $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
+                    /* gather blog posts about this dataset */
+                    $this->_request_data['blogposts'] = $this->_seek_blogposts();                    
                     /* load the comments if enabled */
                     if ($this->_config->get('allow_comments'))
                     {
@@ -590,5 +592,26 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         }
 
         return $comments_node;
+    }
+
+    /**
+     * Searches for related blog posts
+     * @return array of blog articles
+     * @access private
+     */
+    function _seek_blogposts()
+    {                
+        $blogposts = array();
+        $qb = new midgard_query_builder('midgard_parameter');
+        $qb->add_constraint('domain', '=', 'net.nehmer.blog');
+        $qb->add_constraint('name', '=', 'dataset');
+        $qb->add_constraint('value', '=', $this->_object->guid);        
+        $params = $qb->execute();
+        foreach ($params as $param)
+        {
+            $article = new midcom_db_article($param->parentguid);
+            $blogposts[] = $article;
+        }
+        return $blogposts;
     }
 }
