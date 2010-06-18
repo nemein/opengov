@@ -1,9 +1,6 @@
 <?php
 // Available request keys: article, datamanager, edit_url, delete_url, create_urls
-
-//$data =& $_MIDCOM->get_custom_context_data('request_data');
 $view = $data['view_article'];
-
 $publish_time = $data['article']->metadata->published;
 $published = strftime('%Y-%m-%d', $publish_time);
 $permalink = $_MIDCOM->permalinks->create_permalink($data['article']->guid);
@@ -22,7 +19,7 @@ $dataset_permalink = $_MIDCOM->permalinks->create_permalink($dataset->guid);
             && is_object($dataset))
         {
     ?>
-    <p class="dataset"><a href="&(dataset_permalink);">&(dataset.title);</a></p>
+    <p class="dataset"><?php echo $_MIDCOM->i18n->get_string('related_dataset', 'fi.opengov.datacatalog'); ?>: <a href="&(dataset_permalink);">&(dataset.title);</a></p>
     <?php
         }
     ?>
