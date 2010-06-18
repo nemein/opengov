@@ -5,38 +5,40 @@
      *  license_type
      */
     $info = $data['info'];
-    $class = $data['class'];    
+    $class = $data['class'];
+    $viewlink = '../' . $info->guid;
 ?>
 
 <div class="info_item &(class);">
     <div class="title">
+        <a class="title" href="&(viewlink);">&(info.title);</a>
+    </div>
+
+    <div class="url">
     <?php
         if ($info->url != '')
         {
     ?>
-    <a class="title" href="&(info.url);">&(info.title);</a>
+    <a class="title" href="&(info.url);">&(info.url);</a>
     <?php
         }
         else
         {
     ?>
-    <span class="title">&(info.title);</span>
+    <span class="title">-</span>
     <?php
         }
     ?>
     </div>
+
     <?php
         switch ($data['type'])
         {
             case 'organization':
                 $organization_information = $data['organization_information'];
-                $organization_address = $data['organization_address'];
-                $organization_contact = $data['organization_contact'];
     ?>
 
     <div class="information">&(organization_information);</div>
-    <div class="address">&(organization_address);</div>
-    <div class="contact">&(organization_contact);</div>
     
     <?php
                 break;

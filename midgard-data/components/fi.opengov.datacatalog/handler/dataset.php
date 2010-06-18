@@ -213,11 +213,55 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
             (
                 array
                 (
+                    MIDCOM_TOOLBAR_URL => "organization/view/all",
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all organizations'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                )
+            );
+            $this->_node_toolbar->add_item
+            (
+                array
+                (
+                    MIDCOM_TOOLBAR_URL => "license/view/all",
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all licenses'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                )
+            );
+            $this->_node_toolbar->add_item
+            (
+                array
+                (
+                    MIDCOM_TOOLBAR_URL => "format/view/all",
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all formats'),
+                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                )
+            );
+            $this->_node_toolbar->add_item
+            (
+                array
+                (
                     MIDCOM_TOOLBAR_URL => "suggestion/view/all",
                     MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all suggestions'),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
+
+            if (isset($this->_object->organization))
+            {
+                $organization_guid = fi_opengov_datacatalog_info_dba::get_guid($this->_object->organization);
+                if ($organization_guid)
+                {
+                    $this->_view_toolbar->add_item
+                    (
+                        array
+                        (
+                            MIDCOM_TOOLBAR_URL => "organization/view/" . $organization_guid,
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'organization'),
+                            MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
+                        )
+                    );
+                }
+            }
 
             if (isset($this->_object->license))
             {
@@ -468,8 +512,9 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 midcom_show_style('dataset_list_intro');
                 midcom_show_style('dataset_list_header');
             }
-            $i = 0;
 
+            $i = 0;
+            
             foreach ($this->_datasets as $dataset) 
             {
                 $this->_request_data['dataset'] = $dataset;

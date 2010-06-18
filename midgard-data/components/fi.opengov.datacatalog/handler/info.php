@@ -19,6 +19,9 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     /* the schema db that contain all schemas */
     var $_schemadb = null;
 
+    /* dealing with multiple objects */
+    var $_objects = null;
+    
     /**
      * Simple default constructor.
      */
@@ -28,29 +31,37 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
     }
 
     /**
-     * _on_initialize is called by midcom on creation of the handler
-     */
-    function _on_initialize()
-    {
-        /* @todo: what to do here */
-    }
-
-    /**
      * Loads some data
      */
     public function _load_object($handler_id, $args, &$data)
     {
         $qb = fi_opengov_datacatalog_info_dba::new_query_builder();
-        $qb->add_constraint('guid', '=', $args[0]);
+        if ($args[0] != 'all')
+        {
+            $qb->add_constraint('guid', '=', $args[0]);
+        }
         $qb->add_constraint('type', '=', $this->_request_data['type']);
         $_res = $qb->execute();
         
         if (count($_res))
         {
-            $this->_object = $_res[0];
+            if ($args[0] != 'all')
+            {
+                $this->_object = $_res[0];
+            }
+            else
+            {
+                $this->_objects = $_res;
+                /* make sure _load_datamanager will not bail out */
+                $this->_object = $_res[0];
+                echo "<pre>";
+                //print_r($this->_objects);
+                echo "</pre>";
+            }
         }
         else
         {
+            echo "yes";
             debug_push_class(__CLASS__, __FUNCTION__);
             debug_pop();
             $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
@@ -146,6 +157,9 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
             $label = '';
             switch($handler_id)
             {
+                case 'organization_view':
+                    $label = 'organization';
+                    break;                    
                 case 'license_view':
                     $label = 'license';
                     break;                    
@@ -153,24 +167,28 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
                     $label = 'format';
                     break;
             }
-            $this->_view_toolbar->add_item
-            (
-                array
+            if (   $label != ''
+                && ! count($this->_objects))
+            {
+                $this->_view_toolbar->add_item
                 (
-                    MIDCOM_TOOLBAR_URL => $label . "/edit/". $this->_object->guid,
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('edit %s'), $label),
-                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
-                )
-            );
-            $this->_view_toolbar->add_item
-            (
-                array
+                    array
+                    (
+                        MIDCOM_TOOLBAR_URL => $label . "/edit/". $this->_object->guid,
+                        MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('edit %s'), $label),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_edit_icon'),
+                    )
+                );
+                $this->_view_toolbar->add_item
                 (
-                    MIDCOM_TOOLBAR_URL => $label . "/delete/". $this->_object->guid,
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('delete %s'), $label),
-                    MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
-                )
-            );
+                    array
+                    (
+                        MIDCOM_TOOLBAR_URL => $label . "/delete/". $this->_object->guid,
+                        MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('delete %s'), $label),
+                        MIDCOM_TOOLBAR_ICON => $this->_config->get('default_trash_icon'),
+                    )
+                );
+            }
         }
     }
 
@@ -363,27 +381,59 @@ class fi_opengov_datacatalog_handler_info extends midcom_baseclasses_components_
      */
     public function _show_read($handler_id, &$data)
     {        
-        if ($this->_object)
+        if (count($this->_objects))
         {
-            switch ($this->_request_data['type'])
+            midcom_show_style('info_list_header');
+            $i = 0;
+            foreach($this->_objects as $_object)
             {
-                case 'organization':
-                    $this->_request_data['organization_information'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_information');
-                    $this->_request_data['organization_address'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_address');
-                    $this->_request_data['organization_contact'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_contact');
-                    break;
-                case 'license':
-                    $this->_request_data['license_type'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'license_type');
-                    break;
-                case 'format':
-                    break;
+                $info = new fi_opengov_datacatalog_info_dba($_object->guid);
+                if (is_object($info))
+                {
+                    switch ($this->_request_data['type'])
+                    {
+                        case 'organization':
+                            $this->_request_data['organization_information'] = $info->get_parameter('fi.opengov.datacatalog', 'org_information');
+                            $this->_request_data['organization_address'] = $info->get_parameter('fi.opengov.datacatalog', 'org_address');
+                            $this->_request_data['organization_contact'] = $info->get_parameter('fi.opengov.datacatalog', 'org_contact');
+                            break;
+                        case 'license':
+                            $this->_request_data['license_type'] = $info->get_parameter('fi.opengov.datacatalog', 'license_type');
+                            break;
+                        case 'format':
+                            break;
+                    }
+                    $this->_request_data['info'] = $info;
+                    (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
+                    midcom_show_style('info_item_view');
+                }
             }
-            $this->_request_data['info'] = $this->_object;
-            midcom_show_style('info_item_detailed_view');
+            midcom_show_style('info_list_footer');
         }
         else
         {
-            midcom_show_style('no_info');
+            if ($this->_object)
+            {
+                switch ($this->_request_data['type'])
+                {
+                    case 'organization':
+                        $this->_request_data['organization_information'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_information');
+                        $this->_request_data['organization_address'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_address');
+                        $this->_request_data['organization_contact'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'org_contact');
+                        break;
+                    case 'license':
+                        $this->_request_data['license_type'] = $this->_object->get_parameter('fi.opengov.datacatalog', 'license_type');
+                        break;
+                    case 'format':
+                        break;
+                }
+                $this->_request_data['info'] = $this->_object;
+                midcom_show_style('info_item_detailed_view');
+            }
+            else
+            {
+                midcom_show_style('no_info');
+            }
         }
     }
 

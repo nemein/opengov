@@ -56,6 +56,11 @@ div.info_item .type {
     width: 10em;
 }
 
+div.info_list div.header .url,
+div.info_item .url {
+    width: 11em;
+}
+
 div.dataset_suggestion_list div.header .org,
 div.dataset_suggestion_item .org {
     width: 12em;
