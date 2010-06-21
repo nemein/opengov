@@ -1,0 +1,253 @@
+---# MidCOM String Database
+---VERSION 2.1.0
+---LANGUAGE en
+
+---STRING yes
+Kyllä
+---STRINGEND
+
+---STRING no
+Ei
+---STRINGEND
+
+---STRING email
+Sähköpostiosoite
+---STRINGEND
+
+---STRING welcome
+Tervetuloa - opengov
+---STRINGEND
+
+---STRING search
+Haku
+---STRINGEND
+
+---STRING url
+URL
+---STRINGEND
+
+---STRING no_dataset
+Yhtään datavarantoa ei ole talletettu.
+---STRINGEND
+
+---STRING no_info
+Yhtään tietoa ei ole talletettu.
+---STRINGEND
+
+---STRING dataset_list
+Lista datavarannoista
+---STRINGEND
+
+---STRING topic %s
+Lista datavarannoista
+---STRINGEND
+
+---STRING open %s
+Lista avoimista datavarannoista
+---STRINGEND
+
+---STRING dataset_latest_additions
+Viimeisimmät lisäykset
+---STRINGEND
+
+---STRING description
+Kuvaus
+---STRINGEND
+
+---STRING organization
+Organisaatio
+---STRINGEND
+
+---STRING formats
+Formaatit
+---STRINGEND
+
+---STRING license
+Lisenssi
+---STRINGEND
+
+---STRING additional_info
+Lisätietoa
+---STRINGEND
+
+---STRING dataset_open
+Avoin
+---STRINGEND
+
+---STRING dataset_list_info
+Alla lista datavarannoista, jotka järjestelmässämme on
+---STRINGEND
+
+---STRING dataset_list_tags_info %s
+Alla lista datavarannoista, jotka on merkitty tunnisteella %s
+---STRINGEND
+
+---STRING dataset_filtered_list %s
+Alla lista kaikista %s datavarannosta
+---STRINGEND
+
+---STRING view_datasets
+Näytä datavarannot
+---STRINGEND
+
+---STRING create_dataset
+Luo datavaranto
+---STRINGEND
+
+---STRING edit_dataset
+Muokkaa datavarantoa
+---STRINGEND
+
+---STRING delete_dataset
+Poista datavaranto
+---STRINGEND
+
+---STRING news
+Uutiset
+---STRINGEND
+
+---STRING blog_title
+Uutiset
+---STRINGEND
+
+---STRING discuss %s comment
+Keskustele (%s kommentti(a))
+---STRINGEND
+
+---STRING create_dataset_suggestion
+Ehdota uutta datavarantoa
+---STRINGEND
+
+---STRING edit_dataset_suggestion
+Muokkaa ehdotusta
+---STRINGEND
+
+---STRING delete_dataset_suggestion
+Poista ehdotus
+---STRINGEND
+
+---STRING approve_dataset_suggestions
+Hyväksy ehdotus datavarannosta
+---STRINGEND
+
+---STRING create_suggestion_info
+Auta meitä katalogin kokoamisessa ehdottamalla uutta datavarantoa. Kiitos.
+---STRINGEND
+
+---STRING suggestion_title
+Datavarannon nimi (esimerkiksi valtion budjettitietokanta)
+---STRINGEND
+
+---STRING suggestion_organization
+Vastaava organisaatio
+---STRINGEND
+
+---STRING suggestion_description
+Kuvaus (datan formaatti, lisenssiehdot, jne.)
+---STRINGEND
+
+---STRING suggestion_url
+Linkki sivuun, jolta löytyy tietoa datavarannosta
+---STRINGEND
+
+---STRING suggestion_view
+Näytä ehdotus / ehdotukset
+---STRINGEND
+
+---STRING suggestion_edit
+Muokkaa ehdotusta
+---STRINGEND
+
+---STRING suggestion_create
+Luo ehdotus
+---STRINGEND
+
+---STRING suggestion_delete
+Poista ehdotus
+---STRINGEND
+
+---STRING tags
+Tunnisteet (tagit) erotettuina välilyönnillä (esim. tilasto talous)
+---STRINGEND
+
+---STRING submitter_email
+Sähköpostiosoitteesi
+---STRINGEND
+
+---STRING submitter_name
+Nimesi
+---STRINGEND
+
+---STRING submitter_email
+Sähköpostiosoitteesi
+---STRINGEND
+
+---STRING suggestion_allow_anonymous
+Salli ehdotusten jättäminen anonyymisti
+---STRINGEND
+
+---STRING use_captcha
+Käytä captchaa lomakkeissa, joilla ehdotetaan datavarantoja
+Use captcha in the dataset suggesting forms
+---STRINGEND
+
+---STRING dataset_suggestion_list
+Ehdotetut datavarannot
+---STRINGEND
+
+---STRING dataset_suggestion_list_info
+Alla lista ehdotetuista datavarannoista, jotka järjestelmässämme on
+---STRINGEND
+
+---STRING browse_by_tags
+Selaa datavarantoja tunnisteen perusteella
+---STRINGEND
+
+---STRING commented_on
+kommentoi
+---STRINGEND
+
+---STRING create %s
+Luo %s
+---STRINGEND
+
+---STRING edit %s
+Muokkaa %s
+---STRINGEND
+
+---STRING delete %s
+Poista %s
+---STRINGEND
+
+---STRING view %s
+Näytä %s
+---STRINGEND
+
+---STRING info_organization_information
+Lisätietoa
+---STRINGEND
+
+---STRING info_organization_address
+Osoite
+---STRINGEND
+
+---STRING info_organization_contact
+Yhteystiedot
+---STRINGEND
+
+---STRING info_title
+Otsikko
+---STRINGEND
+
+---STRING info_license_type
+Lisenssityyppi
+---STRINGEND
+
+---STRING related_dataset
+Aiheeseen liittyvä datavaranto
+---STRINGEND
+
+---STRING related_blog_posts
+Aiheeseen liittyvä blog-kirjoitus / kirjoitukset
+---STRINGEND
+
