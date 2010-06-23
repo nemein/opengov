@@ -21,7 +21,7 @@
   </div>
   <div class="submitter">
     <label><?php echo $data['l10n']->get('submitter'); ?></label>
-    &(suggestion.name);
+    &(suggestion.submitter);
   </div>
   <div class="email">
     <label><?php echo $data['l10n']->get('email'); ?></label>

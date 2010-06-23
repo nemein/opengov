@@ -217,7 +217,6 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
                 // This will exit.
             }
         }
-
         $_MIDCOM->auth->drop_sudo();
 
         return $this->_object;
@@ -231,18 +230,15 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      */
     function _handler_create($handler_id, $args, &$data)
     {
-        if (   ($_MIDCOM->auth->user
+        if (   $_MIDCOM->auth->user
             || $this->_config->get('allow_anonymous'))
-            && $_MIDCOM->auth->request_sudo('fi.opengov.datacatalog'))
         {
-            parent::_handler_create($handler_id, $args, &$data);
-            $_MIDCOM->auth->drop_sudo();
-            return true;
+            if ( ! $_MIDCOM->auth->request_sudo('fi.opengov.datacatalog') )
+            {
+                return false;
+            }
         }
-        else
-        {
-            return parent::_handler_create($handler_id, $args, &$data);
-        }            
+        return parent::_handler_create($handler_id, $args, &$data);
     }
 
     /**

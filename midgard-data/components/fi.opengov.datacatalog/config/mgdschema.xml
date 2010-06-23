@@ -65,7 +65,7 @@
         <property name="url" type="string">
             <description>Web address to the suggested dataset</description>
         </property>
-        <property name="name" type="string">
+        <property name="submitter" type="string">
             <description>Name of the submitter</description>
         </property>
         <property name="email" type="string">

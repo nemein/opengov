@@ -43,10 +43,10 @@
             'widget' => 'text',
             'hidden' => false,
         ),
-        'name' => array
+        'submitter' => array
         (
             'title' => 'submitter_name',
-            'storage' => 'name',
+            'storage' => 'submitter',
             'type'    => 'text',
             'widget'  => 'text',
             'required' => true,
