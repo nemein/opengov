@@ -3,7 +3,7 @@
 ---LANGUAGE en
 
 ---STRING yes
-Kyllä
+Kyll‰
 ---STRINGEND
 
 ---STRING no
@@ -11,7 +11,7 @@ Ei
 ---STRINGEND
 
 ---STRING email
-Sähköpostiosoite
+S‰hkˆpostiosoite
 ---STRINGEND
 
 ---STRING welcome
@@ -27,11 +27,11 @@ URL
 ---STRINGEND
 
 ---STRING no_dataset
-Yhtään datavarantoa ei ole talletettu.
+Yht‰‰n datavarantoa ei ole talletettu.
 ---STRINGEND
 
 ---STRING no_info
-Yhtään tietoa ei ole talletettu.
+Yht‰‰n tietoa ei ole talletettu.
 ---STRINGEND
 
 ---STRING dataset_list
@@ -47,7 +47,7 @@ Lista avoimista datavarannoista
 ---STRINGEND
 
 ---STRING dataset_latest_additions
-Viimeisimmät lisäykset
+Viimeisimm‰t lis‰ykset
 ---STRINGEND
 
 ---STRING description
@@ -67,7 +67,7 @@ Lisenssi
 ---STRINGEND
 
 ---STRING additional_info
-Lisätietoa
+Lis‰tietoa
 ---STRINGEND
 
 ---STRING dataset_open
@@ -75,7 +75,7 @@ Avoin
 ---STRINGEND
 
 ---STRING dataset_list_info
-Alla lista datavarannoista, jotka järjestelmässämme on
+Alla lista datavarannoista, jotka j‰rjestelm‰ss‰mme on
 ---STRINGEND
 
 ---STRING dataset_list_tags_info %s
@@ -83,11 +83,11 @@ Alla lista datavarannoista, jotka on merkitty tunnisteella %s
 ---STRINGEND
 
 ---STRING dataset_filtered_list %s
-Alla lista kaikista %s datavarannosta
+Alla lista kaikista %s datavarannoista
 ---STRINGEND
 
 ---STRING view_datasets
-Näytä datavarannot
+N‰yt‰ datavarannot
 ---STRINGEND
 
 ---STRING create_dataset
@@ -127,11 +127,11 @@ Poista ehdotus
 ---STRINGEND
 
 ---STRING approve_dataset_suggestions
-Hyväksy ehdotus datavarannosta
+Hyv‰ksy ehdotus datavarannosta
 ---STRINGEND
 
 ---STRING create_suggestion_info
-Auta meitä katalogin kokoamisessa ehdottamalla uutta datavarantoa. Kiitos.
+Auta meit‰ katalogin kokoamisessa ehdottamalla uutta datavarantoa. Kiitos.
 ---STRINGEND
 
 ---STRING suggestion_title
@@ -147,11 +147,11 @@ Kuvaus (datan formaatti, lisenssiehdot, jne.)
 ---STRINGEND
 
 ---STRING suggestion_url
-Linkki sivuun, jolta löytyy tietoa datavarannosta
+Linkki sivuun, jolta lˆytyy tietoa datavarannosta
 ---STRINGEND
 
 ---STRING suggestion_view
-Näytä ehdotus / ehdotukset
+N‰yt‰ ehdotus / ehdotukset
 ---STRINGEND
 
 ---STRING suggestion_edit
@@ -167,11 +167,11 @@ Poista ehdotus
 ---STRINGEND
 
 ---STRING tags
-Tunnisteet (tagit) erotettuina välilyönnillä (esim. tilasto talous)
+Tunnisteet (tagit) erotettuina v‰lilyˆnnill‰ (esim. tilasto talous)
 ---STRINGEND
 
 ---STRING submitter_email
-Sähköpostiosoitteesi
+S‰hkˆpostiosoitteesi
 ---STRINGEND
 
 ---STRING submitter_name
@@ -179,16 +179,15 @@ Nimesi
 ---STRINGEND
 
 ---STRING submitter_email
-Sähköpostiosoitteesi
+S‰hkˆpostiosoitteesi
 ---STRINGEND
 
 ---STRING suggestion_allow_anonymous
-Salli ehdotusten jättäminen anonyymisti
+Salli ehdotusten j‰tt‰minen anonyymisti
 ---STRINGEND
 
 ---STRING use_captcha
-Käytä captchaa lomakkeissa, joilla ehdotetaan datavarantoja
-Use captcha in the dataset suggesting forms
+K‰yt‰ captchaa lomakkeissa, joilla ehdotetaan datavarantoja
 ---STRINGEND
 
 ---STRING dataset_suggestion_list
@@ -196,7 +195,7 @@ Ehdotetut datavarannot
 ---STRINGEND
 
 ---STRING dataset_suggestion_list_info
-Alla lista ehdotetuista datavarannoista, jotka järjestelmässämme on
+Alla lista ehdotetuista datavarannoista, jotka j‰rjestelm‰ss‰mme on
 ---STRINGEND
 
 ---STRING browse_by_tags
@@ -204,7 +203,7 @@ Selaa datavarantoja tunnisteen perusteella
 ---STRINGEND
 
 ---STRING commented_on
-kommentoi
+Kommentoi
 ---STRINGEND
 
 ---STRING create %s
@@ -220,11 +219,11 @@ Poista %s
 ---STRINGEND
 
 ---STRING view %s
-Näytä %s
+N‰yt‰ %s
 ---STRINGEND
 
 ---STRING info_organization_information
-Lisätietoa
+Lis‰tietoa
 ---STRINGEND
 
 ---STRING info_organization_address
@@ -244,10 +243,18 @@ Lisenssityyppi
 ---STRINGEND
 
 ---STRING related_dataset
-Aiheeseen liittyvä datavaranto
+Aiheeseen liittyv‰ datavaranto
 ---STRINGEND
 
 ---STRING related_blog_posts
-Aiheeseen liittyvä blog-kirjoitus / kirjoitukset
+Aiheeseen liittyv‰ blog-kirjoitus / kirjoitukset
+---STRINGEND
+
+---STRING thank_you
+Kiitos!
+---STRINGEND
+
+---STRING suggestion_recorded_feedback
+Your suggestion has been recorded.
 ---STRINGEND
 

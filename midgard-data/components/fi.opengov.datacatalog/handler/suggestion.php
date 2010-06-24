@@ -219,6 +219,13 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
         }
         $_MIDCOM->auth->drop_sudo();
 
+        /**
+         * in order to display this UI message to anonymous users
+         * allow midcom:ajax in code_init_after_midcom
+         */
+        $_MIDCOM->uimessages->add($_MIDCOM->i18n->get_string('thank_you', 'fi.opengov.datacatalog'),
+                                    $_MIDCOM->i18n->get_string('suggestion_recorded_feedback', 'fi.opengov.datacatalog'));
+
         return $this->_object;
     }
 
@@ -318,7 +325,6 @@ class fi_opengov_datacatalog_handler_suggestion extends midcom_baseclasses_compo
      */
     function _handler_delete($handler_id, $args, &$data)
     {
-//        $this->_action = 'delete';
         return parent::_handler_delete($handler_id, $args, &$data);
     }
     

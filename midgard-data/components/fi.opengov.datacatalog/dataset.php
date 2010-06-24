@@ -14,8 +14,8 @@
  * @package fi.opengov.datacatalog
  */
 class fi_opengov_datacatalog_dataset_dba extends __fi_opengov_datacatalog_dataset_dba
-{
-    /*
+{   
+    /**
      * Finds and returns formats of a dataset
      * @param integer id of the dataset
      * @return array storing the title and URL of the format's
