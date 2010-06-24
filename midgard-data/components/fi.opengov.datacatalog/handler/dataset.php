@@ -87,9 +87,8 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
 
             $this->_populate_toolbar($handler_id);
 
-            $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-                'Failed to read dataset object (handler: ' . $handler_id . '/' . $arg . ')');
-            //this will result in HTTP error 404
+            // $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
+            //    'Failed to read dataset object (handler: ' . $handler_id . '/' . $arg . ')');
         }
     }
 
@@ -504,53 +503,60 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
     {
         if (isset($this->_datasets))
         {
-            $this->_request_data['handler_id'] = $handler_id;
-
-            if ($this->_show_list)
+            if (! count($this->_datasets))
             {
-                $this->_request_data['filter'] = $this->_filter;
-                midcom_show_style('dataset_list_intro');
-                midcom_show_style('dataset_list_header');
+                midcom_show_style('no_dataset');
             }
-
-            $i = 0;
-            
-            foreach ($this->_datasets as $dataset) 
+            else
             {
-                $this->_request_data['dataset'] = $dataset;
-                $this->_request_data['permalink'] = $_MIDCOM->permalinks->create_permalink($dataset->guid);
-                $this->_request_data['organization'] = fi_opengov_datacatalog_info_dba::get_details($dataset->organization, 'organization');
-                $this->_request_data['license'] = fi_opengov_datacatalog_info_dba::get_details($dataset->license, 'license');
-                $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
+                $this->_request_data['handler_id'] = $handler_id;
 
-                /* show different page when viewing only 1 dataset */
-                if ($handler_id == 'view' && ! $this->_show_list)
+                if ($this->_show_list)
                 {
-                    /* fetch and populate tags */
-                    $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
-                    /* gather blog posts about this dataset */
-                    $this->_request_data['blogposts'] = $this->_seek_blogposts();                    
-                    /* load the comments if enabled */
-                    if ($this->_config->get('allow_comments'))
+                    $this->_request_data['filter'] = $this->_filter;
+                    midcom_show_style('dataset_list_intro');
+                    midcom_show_style('dataset_list_header');
+                }
+
+                $i = 0;
+                
+                foreach ($this->_datasets as $dataset) 
+                {
+                    $this->_request_data['dataset'] = $dataset;
+                    $this->_request_data['permalink'] = $_MIDCOM->permalinks->create_permalink($dataset->guid);
+                    $this->_request_data['organization'] = fi_opengov_datacatalog_info_dba::get_details($dataset->organization, 'organization');
+                    $this->_request_data['license'] = fi_opengov_datacatalog_info_dba::get_details($dataset->license, 'license');
+                    $this->_request_data['formats'] = fi_opengov_datacatalog_dataset_dba::get_formats($dataset->id);
+
+                    /* show different page when viewing only 1 dataset */
+                    if ($handler_id == 'view' && ! $this->_show_list)
                     {
-                        $comments_node = $this->_seek_comments();
-                        if ($comments_node)
+                        /* fetch and populate tags */
+                        $this->_request_data['tags'] = net_nemein_tag_handler::get_tags_by_guid($dataset->guid);
+                        /* gather blog posts about this dataset */
+                        $this->_request_data['blogposts'] = $this->_seek_blogposts();                    
+                        /* load the comments if enabled */
+                        if ($this->_config->get('allow_comments'))
                         {
-                            $this->_request_data['comments_url'] = $comments_node[MIDCOM_NAV_RELATIVEURL] . "comment/{$dataset->guid}";
+                            $comments_node = $this->_seek_comments();
+                            if ($comments_node)
+                            {
+                                $this->_request_data['comments_url'] = $comments_node[MIDCOM_NAV_RELATIVEURL] . "comment/{$dataset->guid}";
+                            }
                         }
+                        midcom_show_style('dataset_item_detailed_view');
                     }
-                    midcom_show_style('dataset_item_detailed_view');
+                    else
+                    {
+                        (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
+                        midcom_show_style('dataset_item_view');
+                    }
                 }
-                else
+                
+                if ($this->_show_list)
                 {
-                    (++$i % 2) ? $this->_request_data['class'] = 'odd' : $this->_request_data['class'] = 'even';
-                    midcom_show_style('dataset_item_view');
+                    midcom_show_style('dataset_list_footer');
                 }
-            }
-            
-            if ($this->_show_list)
-            {
-                midcom_show_style('dataset_list_footer');
             }
         }
         else 

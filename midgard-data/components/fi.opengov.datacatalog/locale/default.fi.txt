@@ -255,6 +255,6 @@ Kiitos!
 ---STRINGEND
 
 ---STRING suggestion_recorded_feedback
-Your suggestion has been recorded.
+Sinun ehdotuksesi on tallennettu.
 ---STRINGEND
 
