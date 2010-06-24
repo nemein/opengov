@@ -77,18 +77,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
         }
         else
         {
-            debug_push_class(__CLASS__, __FUNCTION__);
-            debug_pop();
-            $arg = '';
-            if (isset($args[0]))
-            {
-                $arg = $args[0];
-            }
-
-            $this->_populate_toolbar($handler_id);
-
-            // $_MIDCOM->generate_error(MIDCOM_ERRNOTFOUND,
-            //    'Failed to read dataset object (handler: ' . $handler_id . '/' . $arg . ')');
+            /* display no dataset recorded style */
         }
     }
 
