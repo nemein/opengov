@@ -18,11 +18,11 @@
     &(dataset.description);
   </div>
   <div class="org">
-    <label><?php echo $data['l10n']->get('organization'); ?></label>
+    <label><?php echo ucfirst($data['l10n']->get('organization')); ?></label>
     &(organization['title']);
   </div>
   <div class="formats">
-    <label><?php echo $data['l10n']->get('formats'); ?></label>
+    <label><?php echo ucfirst($data['l10n']->get('format(s)')); ?></label>
     <?php
         if (count($formats))
         {
@@ -43,7 +43,7 @@
     ?>
   </div>
   <div class="license">
-    <label><?php echo $data['l10n']->get('license'); ?></label>
+    <label><?php echo ucfirst($data['l10n']->get('license')); ?></label>
     <span class="&(license['type']);">&(license['title']);</span>
   </div>
   <div class="url">

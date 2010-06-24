@@ -130,7 +130,7 @@
         ),
         'format' => array
         (
-            'title' => 'formats',
+            'title' => 'format(s)',
             'storage' => null,
             'required' => true,
             'type' => 'mnrelation',

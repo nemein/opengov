@@ -54,15 +54,31 @@ Kuvaus
 ---STRINGEND
 
 ---STRING organization
-Organisaatio
+organisaatio
+---STRINGEND
+
+---STRING organizations
+organisaatiot
+---STRINGEND
+
+---STRING format
+formaati
 ---STRINGEND
 
 ---STRING formats
-Formaatit
+formaatit
+---STRINGEND
+
+---STRING format(s)
+formaati(t)
 ---STRINGEND
 
 ---STRING license
-Lisenssi
+lisenssi
+---STRINGEND
+
+---STRING licenses
+lisenssit
 ---STRINGEND
 
 ---STRING additional_info
@@ -255,4 +271,8 @@ Kiitos!
 
 ---STRING suggestion_recorded_feedback
 Sinun ehdotuksesi on tallennettu.
+---STRINGEND
+
+---STRING all
+kaikki
 ---STRINGEND

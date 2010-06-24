@@ -6,7 +6,7 @@
 
 <div class="dataset_suggestion_list">
   <div class="header">
-    <div class="description"><?php echo $data['l10n']->get('description'); ?></div>
-    <div class="org"><?php echo $data['l10n']->get('organization'); ?></div>
+    <div class="description"><?php echo ucfirst($data['l10n']->get('description')); ?></div>
+    <div class="org"><?php echo ucfirst($data['l10n']->get('organization')); ?></div>
     <div class="url"><?php echo $data['l10n']->get('url'); ?></div>
   </div>

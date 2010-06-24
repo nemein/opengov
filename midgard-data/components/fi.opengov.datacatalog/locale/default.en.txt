@@ -54,15 +54,31 @@ Description
 ---STRINGEND
 
 ---STRING organization
-Organization
+organization
+---STRINGEND
+
+---STRING organizations
+organizations
+---STRINGEND
+
+---STRING format
+format
 ---STRINGEND
 
 ---STRING formats
-Format(s)
+formats
+---STRINGEND
+
+---STRING format(s)
+format(s)
 ---STRINGEND
 
 ---STRING license
-License
+license
+---STRINGEND
+
+---STRING licenses
+licenses
 ---STRINGEND
 
 ---STRING additional_info
@@ -257,3 +273,6 @@ Thank You!
 Your suggestion has been recorded.
 ---STRINGEND
 
+---STRING all
+all
+---STRINGEND

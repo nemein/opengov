@@ -202,7 +202,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 array
                 (
                     MIDCOM_TOOLBAR_URL => "organization/view/all",
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all organizations'),
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('all') . ' ' . $this->_i18n->get_string('organizations')),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
@@ -211,7 +211,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 array
                 (
                     MIDCOM_TOOLBAR_URL => "license/view/all",
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all licenses'),
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('all') . ' ' . $this->_i18n->get_string('licenses')),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
@@ -220,7 +220,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 array
                 (
                     MIDCOM_TOOLBAR_URL => "format/view/all",
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all formats'),
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('all') . ' ' . $this->_i18n->get_string('formats')),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
@@ -229,7 +229,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                 array
                 (
                     MIDCOM_TOOLBAR_URL => "suggestion/view/all",
-                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'all suggestions'),
+                    MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('all') . ' ' . $this->_i18n->get_string('suggestions')),
                     MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                 )
             );
@@ -244,7 +244,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                         array
                         (
                             MIDCOM_TOOLBAR_URL => "organization/view/" . $organization_guid,
-                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'organization'),
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('organization')),
                             MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                         )
                     );
@@ -261,7 +261,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                         array
                         (
                             MIDCOM_TOOLBAR_URL => "license/view/" . $license_guid,
-                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'license'),
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('license')),
                             MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                         )
                     );
@@ -278,7 +278,7 @@ class fi_opengov_datacatalog_handler_dataset extends midcom_baseclasses_componen
                         array
                         (
                             MIDCOM_TOOLBAR_URL => "format/view/" . $format->guid,
-                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), 'format: ' . $format->title),
+                            MIDCOM_TOOLBAR_LABEL => sprintf($this->_i18n->get_string('view %s'), $this->_i18n->get_string('format') . ':' . $format->title),
                             MIDCOM_TOOLBAR_ICON => $this->_config->get('default_list_icon'),
                         )
                     );

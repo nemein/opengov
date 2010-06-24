@@ -9,7 +9,7 @@
 
 <div class="dataset_item_detail">
   <div class="org">
-    <label><?php echo $data['l10n']->get('organization'); ?></label>
+    <label><?php echo ucfirst($data['l10n']->get('organization')); ?></label>
     &(suggestion.organization);
   </div>
   <div class="description">
