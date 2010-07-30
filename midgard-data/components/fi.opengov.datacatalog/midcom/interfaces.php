@@ -48,7 +48,7 @@ class fi_opengov_datacatalog_interface extends midcom_baseclasses_components_int
         // Note: the API key has to be defined in /etc/midgard/midcom.conf
         $apikey = $GLOBALS['midcom_config']['qaiku_apikey'];
 
-        $_MIDCOM->load_library('org_openpsa_httplib');
+        $_MIDCOM->load_library('org.openpsa.httplib');
         $message = array
         (
             'channel' => 'opendata',
