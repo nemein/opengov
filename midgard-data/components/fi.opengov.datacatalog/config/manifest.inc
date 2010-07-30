@@ -5,6 +5,18 @@
 (
     'midcom_dba_classes.inc',
 ),
+'watches' => array
+(
+    array
+    (
+        'classes' => array
+        (
+            'midcom_baseclasses_database_article',
+            'fi_opengov_datacatalog_dataset_dba',
+        ),
+        'operations' => MIDCOM_OPERATION_DBA_UPDATE,
+    ),
+),
 'package.xml' => array
 (
     'summary' => 'Open Data Catalog',
@@ -32,6 +44,7 @@
         'net.nehmer.blog' => array(),
         'net.nehmer.comments' => array(),
         'net.nemein.tag' => array(),
+        'org.openpsa.httplib' => array(),
         'midcom' => array(),
     ),
 ),

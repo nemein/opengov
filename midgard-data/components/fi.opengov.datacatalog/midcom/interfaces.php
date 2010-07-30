@@ -42,5 +42,59 @@ class fi_opengov_datacatalog_interface extends midcom_baseclasses_components_int
         unset($_dataset);
         return $_url;
     }
+
+    function _on_watched_dba_update($object)
+    {
+        // Note: the API key has to be defined in /etc/midgard/midcom.conf
+        $apikey = $GLOBALS['midcom_config']['qaiku_apikey'];
+
+        $_MIDCOM->load_library('org_openpsa_httplib');
+        $message = array
+        (
+            'channel' => 'opendata',
+            'source'  => 'opengov.fi',
+            'lang'    => 'fi',
+            'status'  => '',
+            'external_url' => '',
+        );
+
+        if ($object->get_parameter('fi.opengov.datacatalog', 'qaiku_id'))
+        {
+            // This is already on Qaiku, skip
+            return;
+        }
+
+        if ($object instanceof midcom_baseclasses_database_article)
+        {
+            // Check that the article is a visible one
+            $topic = new midcom_db_topic($object->topic);
+            if ($topic->component != 'net.nehmer.blog')
+            {
+                return;
+            }
+            $message['status'] = "[blog] {$object->title}";
+        }
+        elseif ($object instanceof fi_opengov_datacatalog_dataset_dba)
+        {
+            // Check that the dataset is a published one
+            if (!fi_opengov_datacatalog_dataset_dba::matching_license_type($object->guid, 'free'))
+            {
+                // We don't publicize closed datasets
+                return;
+            }
+            $message['status'] = "[dataset] {$object->title}";
+        }
+        else
+        {
+            return;
+        }
+
+        $message['external_url'] = $_MIDCOM->permalinks->resolve_permalink($object->guid);
+
+        $http = new org_openpsa_httplib();
+        $json = $http->post("http://www.qaiku.com/api/statuses/update.json?apikey={$apikey}", $message);
+        $qaiku = json_decode($json);
+        $object->set_parameter('fi.opengov.datacatalog', 'qaiku_id', $qaiku['id']);
+    }
 }
 ?>
