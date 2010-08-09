@@ -94,7 +94,11 @@ class fi_opengov_datacatalog_interface extends midcom_baseclasses_components_int
         $http = new org_openpsa_httplib();
         $json = $http->post("http://www.qaiku.com/api/statuses/update.json?apikey={$apikey}", $message);
         $qaiku = json_decode($json);
-        $object->set_parameter('fi.opengov.datacatalog', 'qaiku_id', $qaiku['id']);
+        if (   is_object($qaiku)
+            && isset($qaiku->id))
+        {    
+            $object->set_parameter('fi.opengov.datacatalog', 'qaiku_id', $qaiku->id);
+        }
     }
 }
 ?>
