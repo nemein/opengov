@@ -14,14 +14,20 @@
 <div class="dataset_item &(class);">
   <div class="description">
     <a class="title" href="&(permalink);">&(dataset.title);</a>
-    &(dataset.description);
+<?php
+    $description = $dataset->description;
+    if (strlen($description) > 200)
+    {
+        $description = substr($description, 0, 200) . '...';
+    }
+?>
+    &(description);
   </div>
   <div class="org">
     &(organization['title']);
   </div>
   <div class="formats">
     <?php
-        //var_dump($formats);
         if (count($formats))
         {
             $list = '';
